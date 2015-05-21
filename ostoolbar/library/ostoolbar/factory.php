@@ -28,6 +28,22 @@ abstract class Factory {
 		return static::getInstance('\Ostoolbar\Configuration');
 	}
 
+	/**
+	 * @return Controller
+	 */
+	public static function getController() {
+		return static::getInstance('\Ostoolbar\Controller');
+	}
+
+	/**
+	 * @param $name
+	 *
+	 * @return Model
+	 */
+	public static function getModel($name)
+	{
+		return static::getInstance('\Ostoolbar\Model\\' . $name);
+	}
 
 	/**
 	 * Generic factory method

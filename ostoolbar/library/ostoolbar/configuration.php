@@ -16,30 +16,60 @@ class Configuration {
 	const SETTINGS_GROUP = 'ostoolbar_settings_group';
 
 	public function init_settings() {
-		add_settings_section( self::SETTINGS_SECTION, 'Plugin Settings', array(
-			$this,
-			'section_out'
-		), self::SETTINGS_PAGE );
-		add_settings_field( 'api_key', __( 'API Key', 'ostoolbar' ), array(
-			$this,
-			'api_key_field'
-		), self::SETTINGS_PAGE, self::SETTINGS_SECTION );
+		add_settings_section(
+			self::SETTINGS_SECTION,
+			'Plugin Settings',
+			array(
+				$this,
+				'section_out'
+			),
+			self::SETTINGS_PAGE
+		);
+
+		add_settings_field(
+			'api_key',
+			__( 'API Key', 'ostoolbar' ),
+			array(
+				$this,
+				'api_key_field'
+			),
+			self::SETTINGS_PAGE, self::SETTINGS_SECTION
+		);
+
 		register_setting( self::SETTINGS_GROUP, 'api_key' );
 
-		add_settings_field( 'videos', __( 'Choose and rearrange videos', 'ostoolbar' ), array(
-			$this,
-			'video_field'
-		), self::SETTINGS_PAGE, self::SETTINGS_SECTION );
-		add_settings_field( 'toolbar_text', __( 'OSToolbar menu text', 'ostoolbar' ), array(
-			$this,
-			'toolbar_text_field'
-		), self::SETTINGS_PAGE, self::SETTINGS_SECTION );
-		//add_settings_field('toolbar_icon', __('OSToolbar Icon', 'ostoolbar'), array($this, 'toolbar_icon_field'), self::SETTINGS_PAGE, self::SETTINGS_SECTION);
+		add_settings_field(
+			'videos',
+			__( 'Choose and rearrange videos', 'ostoolbar' ),
+			array(
+				$this,
+				'video_field'
+			),
+			self::SETTINGS_PAGE,
+			self::SETTINGS_SECTION
+		);
 
-		add_settings_field( 'toolbar_permission', __( 'Choose which users can see videos', 'ostoolbar' ), array(
-			$this,
-			'toolbar_permission_field'
-		), self::SETTINGS_PAGE, self::SETTINGS_SECTION );
+		add_settings_field(
+			'toolbar_text',
+			__( 'OSToolbar menu text', 'ostoolbar' ),
+			array(
+				$this,
+				'toolbar_text_field'
+			),
+			self::SETTINGS_PAGE,
+			self::SETTINGS_SECTION
+		);
+
+		add_settings_field(
+			'toolbar_permission',
+			__( 'Choose which users can see videos', 'ostoolbar' ),
+			array(
+				$this,
+				'toolbar_permission_field'
+			),
+			self::SETTINGS_PAGE,
+			self::SETTINGS_SECTION
+		);
 
 		register_setting( self::SETTINGS_GROUP, 'videos' );
 		register_setting( self::SETTINGS_GROUP, 'toolbar_text' );
@@ -125,30 +155,30 @@ class Configuration {
 				<td>Editors</td>
 				<td><input type="checkbox" onclick="UpdatePermission('editor')" <?php if ( $permission['editor'] ) {
 						echo( 'checked="checked"' );
-					}?> id="chk_editor" name="editor"/></td>
+					} ?> id="chk_editor" name="editor"/></td>
 			</tr>
 			<tr>
 				<td>Authors</td>
 				<td><input type="checkbox" onclick="UpdatePermission('author')" <?php if ( $permission['author'] ) {
 						echo( 'checked="checked"' );
-					}?> id="chk_author" name="author"/></td>
+					} ?> id="chk_author" name="author"/></td>
 			</tr>
 			<tr>
 				<td>Contributors</td>
 				<td><input type="checkbox"
 				           onclick="UpdatePermission('contributor')" <?php if ( $permission['contributor'] ) {
 						echo( 'checked="checked"' );
-					}?> id="chk_contributor" name="contributor"/></td>
+					} ?> id="chk_contributor" name="contributor"/></td>
 			</tr>
 			<tr>
 				<td>Subscribers</td>
 				<td><input type="checkbox"
 				           onclick="UpdatePermission('subscriber')" <?php if ( $permission['subscriber'] ) {
 						echo( 'checked="checked"' );
-					}?> id="chk_subscriber" name="subscriber"/></td>
+					} ?> id="chk_subscriber" name="subscriber"/></td>
 			</tr>
 		</table>
-		<input type="hidden" name="toolbar_permission" id="toolbar_permission" value='<?php echo $text;?>'/>
+		<input type="hidden" name="toolbar_permission" id="toolbar_permission" value='<?php echo $text; ?>'/>
 	<?php
 	}
 
@@ -226,10 +256,10 @@ class Configuration {
 					}
 					?>
 					<li class="ui-state-default" id="<?php echo( $item->id ); ?>"><?php echo( $item->title ); ?></li>
-				<?php endforeach;?>
+				<?php endforeach; ?>
 			</ul>
 			<div
-				style="float:left; width:50px; margin-right:20px;"><?php echo( __( "Drag and drop the videos to choose which ones will show to users" ) );?></div>
+				style="float:left; width:50px; margin-right:20px;"><?php echo( __( "Drag and drop the videos to choose which ones will show to users" ) ); ?></div>
 			<?php
 			if ( count( $videos ) ) {
 				$temp = array();
@@ -252,11 +282,11 @@ class Configuration {
 					}
 					?>
 					<li class="ui-state-highlight" id="<?php echo( $item->id ); ?>"><?php echo( $item->title ); ?></li>
-				<?php endforeach;?>
+				<?php endforeach; ?>
 			</ul>
 			<div class="clearfix"></div>
 		</div>
-		<input type='hidden' size='55' name='videos' id="videos" value='<?php echo get_option( 'videos' );?>'/>
+		<input type='hidden' size='55' name='videos' id="videos" value='<?php echo get_option( 'videos' ); ?>'/>
 	<?php
 	}
 
@@ -284,7 +314,7 @@ class Configuration {
 				}
 				?>
 				<option value="<?php echo( $file );?>"><?php echo( $file );?></option>
-			<?php endforeach;?>
+			<?php endforeach; ?>
 		</select>
 		<?php
 		echo __( 'The icon seen in the toolbar link. It is a file name in assets\images folder', 'ostoolbar' );

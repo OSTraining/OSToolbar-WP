@@ -10,26 +10,27 @@ namespace Ostoolbar;
 defined( 'ABSPATH' ) or die();
 
 class Controller {
-	public function action_tutorials( $isFrontend = false ) {
+	public static function action_tutorials( $isFrontend = false ) {
 		if ( $id = (int) $_GET['id'] ) {
-			$this->action_tutorial( $id );
+			static::action_tutorial( $id );
 
 			return;
 		}
 
 		if ( $help = (int) $_GET['help'] ) {
-			$this->action_tutorial( $help, true );
+			static::action_tutorial( $help, true );
 
 			return;
 		}
 
-		$model     = OST_Factory::getInstance( 'OSTModel_Tutorials' );
+		/** @var Model\Tutorials $model */
+		$model     = Factory::getModel( 'Tutorials' );
 		$tutorials = $model->getList();
 
 		$videos = preg_split( "/,/", get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
 		?>
 		<div class="wrap">
-			<h2><img src="<?php echo plugins_url( '/ostoolbar/assets/images/icon-tutorials.png' );?>"
+			<h2><img src="<?php echo plugins_url( '/ostoolbar/assets/images/icon-tutorials.png' ); ?>"
 			         align="absmiddle"/> Tutorials</h2>
 			<?php
 			$api_key = get_option( 'api_key' );
@@ -45,7 +46,7 @@ class Controller {
 				<thead>
 				<tr>
 					<th><?php _e( 'Name' ); ?></th>
-					<th><?php _e( 'Category' );?></th>
+					<th><?php _e( 'Category' ); ?></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -70,9 +71,9 @@ class Controller {
 	<?php
 	}
 
-	public function action_tutorial( $id, $helparticle = false ) {
+	public static function action_tutorial( $id, $helparticle = false ) {
 		if ( $helparticle ) {
-			$model = OST_Factory::getInstance( 'OSTModel_Help' );
+			$model = Factory::getModel( 'Help' );
 			$model->setState( 'id', $id );
 			$tutorial = $model->getData();
 		} else {
@@ -85,9 +86,9 @@ class Controller {
 			<?php if ( in_array( $tutorial->jversion, array( "wp_trial" ) ) ): ?>
 				<iframe src="http://www.ostraining.com/services/adv/adv1.html" width="734px" height="80px"
 				        style="overflow:visible"></iframe>
-			<?php endif;?>
+			<?php endif; ?>
 
-			<h2><?php echo $tutorial->title?></h2>
+			<h2><?php echo $tutorial->title ?></h2>
 			<?php echo $tutorial->introtext . $tutorial->fulltext; ?>
 		</div>
 	<?php
@@ -98,8 +99,8 @@ class Controller {
 		$help  = $model->getData();
 		?>
 		<div class="wrap">
-			<h2><?php echo $help->title;?></h2>
-			<?php echo $help->introtext;?>
+			<h2><?php echo $help->title; ?></h2>
+			<?php echo $help->introtext; ?>
 		</div>
 	<?php
 	}

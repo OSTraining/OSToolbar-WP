@@ -48,9 +48,9 @@ class Application {
 	public function display() {
 		ob_start();
 		if ( ! $_GET['id'] ) {
-			OST_Controller::action_tutorials( true );
+			Controller::action_tutorials( true );
 		} else {
-			OST_Controller::action_tutorial( $_GET['id'] );
+			Controller::action_tutorial( $_GET['id'] );
 		}
 		$content = ob_get_contents();
 		ob_end_clean();
@@ -69,7 +69,6 @@ class Application {
 		}
 	}
 
-	// ---
 	function ostoolbar_load_plugin( $plugin_array ) {
 		$plug                             = plugins_url( 'mce/editor_plugin.js', __FILE__ );
 		$plugin_array['ostoolbar_plugin'] = $plug;
@@ -77,7 +76,6 @@ class Application {
 		return $plugin_array;
 	}
 
-	// ---
 	function ostoolbar_register_button( $buttons ) {
 		$b[] = 'separator';
 		$b[] = 'ostoolbar_plugin_button';
@@ -96,7 +94,7 @@ class Application {
 	}
 
 	public function init_admin_links() {
-		$controller = OST_Factory::getInstance( 'OST_Controller' );
+		$controller = Factory::getController();
 
 		$title = get_option( 'toolbar_text' ) == '' ? 'OSToolbar' : get_option( 'toolbar_text' );
 		$icon  = get_option( 'toolbar_icon' ) == '' ? 'ost_icon.png' : get_option( 'toolbar_icon' );
@@ -105,21 +103,33 @@ class Application {
 		wp_register_style( 'ostoolbar_menu_css', plugins_url( 'ostoolbar/assets/css/menu.php?icon=' . $icon ) );
 		wp_enqueue_style( 'ostoolbar_menu_css' );
 
-		add_object_page( $title, $title, 'see_videos', 'ostoolbar', array(
-			$controller,
-			'action_tutorials'
-		), '' ); //, plugins_url('/ostoolbar/assets/images/'.get_option('toolbar_icon'))
-		//add_submenu_page('ostoolbar', __($title . ' > Tutorials', 'ostoolbar'), __('Tutorials', 'ostoolbar'), 'manage_options', 'ostoolbar', array($controller, 'action_tutorials'));
-		//add_submenu_page('ostoolbar', __('OSToolbar > Help', 'ostoolbar'), __('Help', 'ostoolbar'), 'manage_options', 'ostoolbar_help', array($controller, 'action_help'));
+		add_object_page(
+			$title,
+			$title,
+			'see_videos',
+			'ostoolbar',
+			array(
+				$controller,
+				'action_tutorials'
+			),
+			''
+		);
 
-		add_options_page( __( $title . ' Configuration', 'ostoolbar' ), $title, 'manage_options', 'options-ostoolbar', array(
-			$controller,
-			'action_configuration'
-		) );
+		add_options_page(
+			__( $title . ' Configuration', 'ostoolbar' ),
+			$title,
+			'manage_options',
+			'options-ostoolbar',
+			array(
+				$controller,
+				'action_configuration'
+			)
+		);
 	}
 
 	public function start_listener() {
-		$model = OST_Factory::getInstance( 'OSTModel_Help' );
+		/** @var Model\Help $model */
+		$model = Factory::getModel( 'Help' );
 		$model->listen();
 	}
 
@@ -134,7 +144,7 @@ class Application {
 			$width = 500;
 		}
 
-		echo "
+		echo <<<JS
 		<script type='text/javascript'>
 			function ostoolbar_popup(address, title, params)
 			{
@@ -165,7 +175,7 @@ class Application {
 
 			}
 		</script>
-		";
+JS;
 	}
 
 }

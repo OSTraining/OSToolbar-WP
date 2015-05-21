@@ -5,10 +5,11 @@
  * @copyright  2015 Alledia.com, All rights reserved
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+namespace Ostoolbar;
 
 defined( 'ABSPATH' ) or die();
 
-class Ostoolbar_Loader {
+class Loader {
 	/**
 	 * Associative array where the key is a namespace prefix and the value
 	 * is an array of base directories for classes in that namespace.
@@ -18,7 +19,7 @@ class Ostoolbar_Loader {
 	protected static $prefixes = array();
 
 	/**
-	 * @var Ostoolbar_loader
+	 * @var loader
 	 */
 	protected static $instance = null;
 

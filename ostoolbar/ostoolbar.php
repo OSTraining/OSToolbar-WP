@@ -21,8 +21,8 @@ if (!defined('OSTOOLBAR_VERSION')) {
 	define('OSTOOLBAR_BASE', __DIR__);
 	define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
 
-	require_once OSTOOLBAR_LIBRARY . '/loader.php';
-	Ostoolbar_Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
+	require_once OSTOOLBAR_LIBRARY . '/ostoolbar/loader.php';
+	Ostoolbar\Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
 }
 
 Ostoolbar\Factory::getApplication()->init();

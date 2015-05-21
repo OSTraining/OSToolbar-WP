@@ -10,7 +10,6 @@ namespace Ostoolbar;
 defined( 'ABSPATH' ) or die();
 
 class Model {
-
 	private $state = array();
 	private $errors = array();
 
@@ -45,5 +44,4 @@ class Model {
 
 		return $this->errors[ $last ];
 	}
-
 }
