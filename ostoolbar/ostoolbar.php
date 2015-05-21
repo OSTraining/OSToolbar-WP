@@ -7,19 +7,23 @@ Author: OSTraining.com
 Version: 2.5
 Author URI: http://www.ostraining.com
 */
+/**
+ * @package    OSToolbar-WP
+ * @contact    www.alledia.com, support@alledia.com
+ * @copyright  2015 Alledia.com, All rights reserved
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ */
 
-require_once(dirname(__FILE__).'/libraries/factory.php');
-require_once(dirname(__FILE__).'/libraries/configuration.php');
-require_once(dirname(__FILE__).'/libraries/application.php');
-require_once(dirname(__FILE__).'/libraries/model.php');
-require_once(dirname(__FILE__).'/libraries/cache.php');
-require_once(dirname(__FILE__).'/libraries/request.php');
-require_once(dirname(__FILE__).'/libraries/rest.php');
-require_once(dirname(__FILE__).'/models/tutorial.php');
-require_once(dirname(__FILE__).'/models/tutorials.php');
-require_once(dirname(__FILE__).'/models/help.php');
-require_once(dirname(__FILE__).'/models/helppage.php');
-require_once(dirname(__FILE__).'/controller.php');
+defined( 'ABSPATH' ) or die();
 
-$app = OST_Factory::getInstance('OST_Application');
-$app->init();
+if (!defined('OSTOOLBAR_VERSION')) {
+	define('OSTOOLBAR_VERSION', '3.0');
+	define('OSTOOLBAR_BASE', __DIR__);
+	define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
+
+	require_once OSTOOLBAR_LIBRARY . '/loader.php';
+	Ostoolbar_Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
+}
+
+//$app = OST_Factory::getInstance('OST_Application');
+//$app->init();
