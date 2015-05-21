@@ -7,22 +7,29 @@
  */
 namespace Ostoolbar\Model;
 
+use Ostoolbar\Factory;
 use Ostoolbar\Model;
+use Ostoolbar\Request;
 
-class Tutorial extends \Ostoolbar\Model {
+class Tutorial extends Model {
 	protected $data = null;
 
 	public function getData() {
-		$id        = $this->getState( 'id' );
-		$tmodel    = \Ostoolbar\Factory::getModel( 'Tutorials' );
-		$tutorials = $tmodel->getList();
+		$id = $this->getState( 'id' );
 
-		foreach ( @$tutorials as $t ) {
-			if ( $t->id == $id ) {
-				$this->data            = $t;
-				$this->data->introtext = OST_RequestHelper::filter( $this->data->introtext );
-				$this->data->fulltext  = OST_RequestHelper::filter( $this->data->fulltext );
-				break;
+		/** @var Tutorials $model */
+		$model = Factory::getModel( 'Tutorials' );
+
+		$tutorials = $model->getList();
+		if ( is_array( $tutorials ) ) {
+			foreach ( $tutorials as $tutorial ) {
+				if ( $tutorial->id == $id ) {
+					$tutorial->introtext = Request::filter( $tutorial->introtext );
+					$tutorial->fulltext  = Request::filter( $tutorial->fulltext );
+
+					$this->data = $tutorial;
+					break;
+				}
 			}
 		}
 

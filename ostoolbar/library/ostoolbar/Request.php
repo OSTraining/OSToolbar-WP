@@ -5,11 +5,11 @@
  * @copyright  2015 Alledia.com, All rights reserved
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-namespace Ostoolbar\Request;
+namespace Ostoolbar;
 
 defined( 'ABSPATH' ) or die();
 
-class Helper {
+class Request {
 	static $host_url = 'http://www.ostraining.com/index.php?option=com_api&v=wp';
 	static $isTrial = false;
 

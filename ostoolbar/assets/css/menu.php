@@ -6,7 +6,7 @@ li.toplevel_page_ostoolbar .wp-menu-image a img
 
 li.toplevel_page_ostoolbar .wp-menu-image
 {
-	background:url(../images/<?php echo($_REQUEST["icon"]);?>) no-repeat;
+	background:url(../images/<?php echo($_REQUEST['icon']);?>) no-repeat;
 	background-position:0 -32px;
 }
 

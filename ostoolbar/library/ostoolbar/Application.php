@@ -42,7 +42,7 @@ class Application {
 		if ( $_GET['page'] == 'ostoolbar' ) {
 			add_action( 'admin_notices', array( $this, 'api_key_check' ) );
 		}
-		add_action( 'init', array( $this, 'ostoolbar_add_editor_button' ) );
+		add_action( 'init', array( $this, 'add_editor_button' ) );
 	}
 
 	public function display() {
@@ -58,25 +58,25 @@ class Application {
 		return $content;
 	}
 
-	function ostoolbar_add_editor_button() {
+	public function add_editor_button() {
 		if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
 			return;
 		}
 
 		if ( get_user_option( 'rich_editing' ) == 'true' ) {
-			add_filter( 'mce_external_plugins', array( $this, 'ostoolbar_load_plugin' ) );
-			add_filter( 'mce_buttons', array( $this, 'ostoolbar_register_button' ) );
+			add_filter( 'mce_external_plugins', array( $this, 'load_plugin' ) );
+			add_filter( 'mce_buttons', array( $this, 'register_button' ) );
 		}
 	}
 
-	function ostoolbar_load_plugin( $plugin_array ) {
+	public function load_plugin( $plugin_array ) {
 		$plug                             = plugins_url( 'mce/editor_plugin.js', __FILE__ );
 		$plugin_array['ostoolbar_plugin'] = $plug;
 
 		return $plugin_array;
 	}
 
-	function ostoolbar_register_button( $buttons ) {
+	public function register_button( $buttons ) {
 		$b[] = 'separator';
 		$b[] = 'ostoolbar_plugin_button';
 		if ( is_array( $buttons ) && ! empty( $buttons ) ) {
@@ -89,7 +89,7 @@ class Application {
 	public function api_key_check() {
 		$api_key = get_option( 'api_key' );
 		if ( ! $api_key ) {
-			//echo "<div class='error'>Please enter an API key in the <a href='options-general.php?page=options-ostoolbar'>OSToolbar settings</a>.</div>";
+			// @TODO: Determine what to do here
 		}
 	}
 
@@ -144,38 +144,32 @@ class Application {
 			$width = 500;
 		}
 
-		echo <<<JS
-		<script type='text/javascript'>
-			function ostoolbar_popup(address, title, params)
-			{
-				if (params == null)
-				{
-					params = {};
-				}
+		$js = <<<JS
+<script type='text/javascript'>
+	function ostoolbar_popup(address, title, params)
+	{
+		if (params == null) {
+			params = {};
+		}
 
-				if (!params.height)
-				{
-					params.height = $height;
-				}
+		if (!params.height) {
+			params.height = $height;
+		}
 
-				if (!params.width)
-				{
-					params.width = $width;
-				}
+		if (!params.width) {
+			params.width = $width;
+		}
 
-				var attr = [];
-				for (key in params)
-				{
-					attr.push(key+'='+params[key]);
-				}
+		var attr = [];
+		for (key in params) {
+			attr.push(key+'='+params[key]);
+		}
+		attr = attr.join(',');
 
-				attr = attr.join(',');
-
-				window.open(address, title, attr);
-
-			}
-		</script>
-JS;
+		window.open(address, title, attr);
 	}
-
+</script>
+JS;
+		echo $js;
+	}
 }

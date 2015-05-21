@@ -27,18 +27,25 @@ class Controller {
 		$model     = Factory::getModel( 'Tutorials' );
 		$tutorials = $model->getList();
 
-		$videos = preg_split( "/,/", get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
+		$videos = preg_split( '/,/', get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
 		?>
 		<div class="wrap">
-			<h2><img src="<?php echo plugins_url( '/ostoolbar/assets/images/icon-tutorials.png' ); ?>"
+			<h2><img src="<?php echo plugins_url( '/ostoolbar/assets/images/icon-48-tutorials.png' ); ?>"
 			         align="absmiddle"/> Tutorials</h2>
 			<?php
 			$api_key = get_option( 'api_key' );
-			if ( OST_RequestHelper::$isTrial ) {
+			if ( Request::$isTrial ) {
 				if ( $api_key ) {
-					echo "<div class='error'>Your API key is invalid. Please enter an API key in the <a href='options-general.php?page=options-ostoolbar'>OSToolbar settings</a>.</div>";
+					echo '<div class="error">'
+					     . 'Your API key is invalid. Please enter an API key in the'
+					     . ' <a href="options-general.php?page=options-ostoolbar">OSToolbar settings</a>.'
+					     . '</div>';
 				} else {
-					echo "<div class='error'>You are using OSToolbar Free. Visit <a href='http://OSToolbar.com'>OSToolbar.com</a> to get the Pro version with more videos, more features and to remove all advertising.</div>";
+					echo '<div class="error">'
+					     . 'You are using OSToolbar Free.'
+					     . ' Visit <a href="http://OSToolbar.com">OSToolbar.com</a>'
+					     . ' to get the Pro version with more videos, more features and to remove all advertising.'
+					     . '</div>';
 				}
 			}
 			?>
@@ -50,15 +57,28 @@ class Controller {
 				</tr>
 				</thead>
 				<tbody>
-				<?php for ( $i = 0; $i < count( $tutorials ); $i ++ ) : ?>
-					<?php
-					if ( is_array( $videos ) && count( $videos ) && ! in_array( $tutorials[ $i ]->id, $videos ) ) {
+				<?php
+				for ( $i = 0; $i < count( $tutorials ); $i ++ ) :
+					if ( is_array( $videos )
+					     && count( $videos )
+					     && ! in_array( $tutorials[ $i ]->id, $videos )
+					) {
 						continue;
+					}
+					if ( $isFrontend ) {
+						$link = array(
+							'page_id' => $_GET["page_id"],
+							'id'      => $tutorials[ $i ]->id
+						);
+					} else {
+						$link = array(
+							'page_id' => $tutorials[ $i ]->link
+						);
 					}
 					?>
 					<tr>
 						<td>
-							<a href="<?php echo( $isFrontend ? "index.php?page_id=" . $_GET["page_id"] . "&id=" . $tutorials[ $i ]->id : $tutorials[ $i ]->link ); ?>">
+							<a href="<?php echo 'index.php?' . http_build_query( $link ); ?>">
 								<?php echo $tutorials[ $i ]->title; ?></a>
 						</td>
 						<td><?php echo $tutorials[ $i ]->ostcat_name; ?></td>
@@ -66,18 +86,19 @@ class Controller {
 				<?php endfor; ?>
 				</tbody>
 			</table>
-
 		</div>
 	<?php
 	}
 
-	public static function action_tutorial( $id, $helparticle = false ) {
-		if ( $helparticle ) {
+	public static function action_tutorial( $id, $help_article = false ) {
+		if ( $help_article ) {
+			/** @var Model\Help $model */
 			$model = Factory::getModel( 'Help' );
 			$model->setState( 'id', $id );
 			$tutorial = $model->getData();
 		} else {
-			$model = OST_Factory::getInstance( 'OSTModel_Tutorial' );
+			/** @var Model\Tutorial $model */
+			$model = Factory::getModel( 'Tutorial' );
 			$model->setState( 'id', $id );
 			$tutorial = $model->getData();
 		}
@@ -95,7 +116,8 @@ class Controller {
 	}
 
 	public function action_help() {
-		$model = OST_Factory::getInstance( 'OSTModel_HelpPage' );
+		/** @var Model\HelpPage $model */
+		$model = Factory::getModel( 'HelpPage' );
 		$help  = $model->getData();
 		?>
 		<div class="wrap">
@@ -107,21 +129,19 @@ class Controller {
 
 	public function action_configuration() {
 		wp_deregister_script( 'jquery_ui' );
-		wp_register_script( 'jquery_ui', plugins_url( 'assets/js/jquery-ui-1.10.3.custom.min.js', __FILE__ ) );
+		wp_register_script( 'jquery_ui', plugins_url( 'assets/js/jquery-ui.js', __FILE__ ) );
 		wp_enqueue_script( 'jquery_ui' );
 
 		wp_deregister_style( 'jquery_ui_css' );
-		wp_register_style( 'jquery_ui_css', plugins_url( 'assets/css/ui-lightness/jquery-ui-1.8.6.custom.css', __FILE__ ) );
+		wp_register_style( 'jquery_ui_css', plugins_url( 'assets/css/ui-lightness/jquery-ui.css', __FILE__ ) );
 		wp_enqueue_style( 'jquery_ui_css' );
-
-
 		?>
 		<div class="wrap">
 			<h2>OSToolbar Configuration</h2>
 
 			<form method="post" action="options.php">
-				<?php settings_fields( OST_Configuration::SETTINGS_GROUP ); ?>
-				<?PHP do_settings_sections( OST_Configuration::SETTINGS_PAGE ); ?>
+				<?php settings_fields( Configuration::SETTINGS_GROUP ); ?>
+				<?PHP do_settings_sections( Configuration::SETTINGS_PAGE ); ?>
 				<p class="submit">
 					<input type="submit" class="button-primary" value="<?php _e( 'Save Changes' ) ?>"/>
 				</p>
@@ -129,5 +149,4 @@ class Controller {
 		</div>
 	<?php
 	}
-
 }
