@@ -12,16 +12,37 @@ defined( 'ABSPATH' ) or die();
 abstract class Factory {
 	static $instances = array();
 
-	public static function getInstance( $name ) {
-		$key = strtolower( $name );
-		if ( ! isset( self::$instances[ $key ] ) ) {
-			self::$instances[ $key ] = new $name();
+	/**
+	 * Main application object
+	 *
+	 * @return Application
+	 */
+	public static function getApplication() {
+		return static::getInstance( '\Ostoolbar\Application' );
+	}
+
+	/**
+	 * @return Configuration
+	 */
+	public static function getConfiguration() {
+		return static::getInstance('\Ostoolbar\Configuration');
+	}
+
+
+	/**
+	 * Generic factory method
+	 *
+	 * @param $class_name
+	 *
+	 * @return mixed
+	 */
+	protected static function getInstance( $class_name ) {
+		$key = md5( $class_name );
+		if ( ! isset( static::$instances[ $key ] ) ) {
+			static::$instances[ $key ] = new $class_name();
 		}
 
-		return self::$instances[ $key ];
+		return static::$instances[ $key ];
 	}
 
-	public static function test() {
-		echo 'This is my test';
-	}
 }

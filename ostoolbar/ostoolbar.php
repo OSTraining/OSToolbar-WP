@@ -25,5 +25,4 @@ if (!defined('OSTOOLBAR_VERSION')) {
 	Ostoolbar_Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
 }
 
-//$app = OST_Factory::getInstance('OST_Application');
-//$app->init();
+Ostoolbar\Factory::getApplication()->init();
