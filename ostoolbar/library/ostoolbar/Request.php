@@ -16,19 +16,14 @@ abstract class Request
 
     public static function getHostUrl()
     {
-        $trial = self::$isTrial ? '_trial' : '';
+        $trial = static::$isTrial ? '_trial' : '';
 
         $vars = array(
             'option' => 'com_api',
             'v'      => 'wp' . $trial
         );
 
-        return self::$hostUrl . 'index.php?' . http_build_query($vars);
-    }
-
-    public static function isTrial()
-    {
-        static::$isTrial = true;
+        return static::$hostUrl . 'index.php?' . http_build_query($vars);
     }
 
     public static function makeRequest($data)
@@ -45,7 +40,17 @@ abstract class Request
         }
         $data = array_merge($data, $staticData);
 
-        $response = Rest\Request::send(static::getHostUrl(), $data);
+        $response = Rest\Request::send(
+            static::getHostUrl(),
+            $data,
+            'POST',
+            array(
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_MAXREDIRS      => 1,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false
+            )
+        );
 
         if ($body = $response->getBody()) {
             $response->setBody(json_decode($body));
