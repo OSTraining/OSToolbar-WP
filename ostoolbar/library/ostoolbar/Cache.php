@@ -31,7 +31,7 @@ class Cache {
 		if ( ! $cache_lifetime ) {
 			$cache_lifetime = static::HALF_DAY;
 		}
-		$cache->setLifetime( $cache_lifetime );
+		$cache->set_lifetime( $cache_lifetime );
 
 		$response = Request::make_request( array( 'resource' => 'checkapi' ) );
 		if ( $response->has_error() ) {

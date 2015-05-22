@@ -26,24 +26,21 @@ defined( 'ABSPATH' ) or die();
  * @TODO: Use an updated caching system
  */
 class StorageFile {
-	/**
-	 * @since    1.6
-	 */
-	private $_root;
+	private $root = null;
 
-	private $_cache_path;
+	private $cache_path = null;
 
-	private $_lifetime;
+	private $lifetime = null;
 
 	public function __construct() {
-		$this->_cache_path = dirname( dirname( __FILE__ ) ) . '/cache';
-		if ( ! is_dir( $this->_cache_path ) ) {
-			@mkdir( $this->_cache_path, 0755 );
+		$this->cache_path = dirname( dirname( __FILE__ ) ) . '/cache';
+		if ( ! is_dir( $this->cache_path ) ) {
+			@mkdir( $this->cache_path, 0755 );
 		}
 	}
 
-	public function setLifetime( $lifetime ) {
-		$this->_lifetime = $lifetime;
+	public function set_lifetime( $lifetime ) {
+		$this->lifetime = $lifetime;
 	}
 
 	/**
@@ -59,9 +56,9 @@ class StorageFile {
 	public function get( $id, $group, $checkTime = true ) {
 		$data = false;
 
-		$path = $this->_getFilePath( $id, $group );
+		$path = $this->get_file_path( $id, $group );
 
-		if ( $checkTime == false || ( $checkTime == true && $this->_checkExpire( $id, $group ) === true ) ) {
+		if ( $checkTime == false || ( $checkTime == true && $this->check_expire( $id, $group ) === true ) ) {
 			if ( file_exists( $path ) ) {
 				$data = file_get_contents( $path );
 				if ( $data ) {
@@ -88,7 +85,7 @@ class StorageFile {
 	 */
 	public function store( $id, $group, $data ) {
 		$written = false;
-		$path    = $this->_getFilePath( $id, $group );
+		$path    = $this->get_file_path( $id, $group );
 		$die     = '<?php die("Access Denied"); ?>#x#';
 
 		// Prepend a die string
@@ -120,7 +117,7 @@ class StorageFile {
 	 * @since    1.5
 	 */
 	public function remove( $id, $group ) {
-		$path = $this->_getFilePath( $id, $group );
+		$path = $this->get_file_path( $id, $group );
 		if ( ! @unlink( $path ) ) {
 			return false;
 		}
@@ -150,17 +147,17 @@ class StorageFile {
 
 		switch ( $mode ) {
 			case 'notgroup':
-				$folders = $this->_folders( $this->_root );
+				$folders = $this->folders( $this->root );
 				for ( $i = 0, $n = count( $folders ); $i < $n; $i ++ ) {
 					if ( $folders[ $i ] != $folder ) {
-						$return |= $this->_deleteFolder( $this->_root . DS . $folders[ $i ] );
+						$return |= $this->delete_folder( $this->root . DS . $folders[ $i ] );
 					}
 				}
 				break;
 			case 'group':
 			default:
-				if ( is_dir( $this->_root . DS . $folder ) ) {
-					$return = $this->_deleteFolder( $this->_root . DS . $folder );
+				if ( is_dir( $this->root . DS . $folder ) ) {
+					$return = $this->delete_folder( $this->root . DS . $folder );
 				}
 				break;
 		}
@@ -177,10 +174,10 @@ class StorageFile {
 	public function gc() {
 		$result = true;
 		// files older than lifeTime get deleted from cache
-		$files = $this->_filesInFolder( $this->_root, '', true, true );
+		$files = $this->files_in_folder( $this->root, '', true, true );
 		foreach ( $files As $file ) {
 			$time = @filemtime( $file );
-			if ( ( $time + $this->_lifetime ) < $this->_now || empty( $time ) ) {
+			if ( ( $time + $this->lifetime ) < time() || empty( $time ) ) {
 				$result |= @unlink( $file );
 			}
 		}
@@ -195,7 +192,7 @@ class StorageFile {
 	 * @since    1.5
 	 */
 	public function test() {
-		return is_writable( $this->_cache_path );
+		return is_writable( $this->cache_path );
 	}
 
 	/**
@@ -205,14 +202,16 @@ class StorageFile {
 	 * @param    string $group The cache data group.
 	 *
 	 * @since    1.6
+	 *
+	 * @return bool
 	 */
-	private function _checkExpire( $id, $group ) {
-		$path = $this->_getFilePath( $id, $group );
+	private function check_expire( $id, $group ) {
+		$path = $this->get_file_path( $id, $group );
 
 		// check prune period
 		if ( file_exists( $path ) ) {
 			$time = @filemtime( $path );
-			if ( ( $time + $this->_lifetime ) < $this->_now || empty( $time ) ) {
+			if ( ( $time + $this->lifetime ) < time() || empty( $time ) ) {
 				@unlink( $path );
 
 				return false;
@@ -233,10 +232,10 @@ class StorageFile {
 	 * @return    string    The cache file path
 	 * @since    1.5
 	 */
-	private function _getFilePath( $id, $group ) {
-		$name = $this->_getCacheId( $id, $group );
-		//$dir	= $this->_root.DS.$group;
-		$dir = $this->_cache_path;
+	private function get_file_path( $id, $group ) {
+		$name = $this->get_cache_id( $id, $group );
+		//$dir	= $this->root.DS.$group;
+		$dir = $this->cache_path;
 
 		// If the folder doesn't exist try to create it
 		if ( ! is_dir( $dir ) ) {
@@ -254,7 +253,7 @@ class StorageFile {
 		return $dir . '/' . $name . '.php';
 	}
 
-	private function _getCacheId( $id, $group ) {
+	private function get_cache_id( $id, $group ) {
 		$name = md5( SECURE_AUTH_KEY . '-' . $id );
 
 		return $name;
@@ -268,28 +267,28 @@ class StorageFile {
 	 * @return boolean True on success.
 	 * @since 1.6
 	 */
-	private function _deleteFolder( $path ) {
+	private function delete_folder( $path ) {
 		// Sanity check
-		if ( ! $path || ! is_dir( $path ) || empty( $this->_root ) ) {
+		if ( ! $path || ! is_dir( $path ) || empty( $this->root ) ) {
 			// Bad programmer! Bad Bad programmer!
-			JError::raiseWarning( 500, 'JCacheStorageFile::_deleteFolder ' . JText::_( 'JLIB_FILESYSTEM_ERROR_DELETE_BASE_DIRECTORY' ) );
+			JError::raiseWarning( 500, 'JCacheStorageFile::delete_folder ' . JText::_( 'JLIB_FILESYSTEM_ERROR_DELETE_BASE_DIRECTORY' ) );
 
 			return false;
 		}
 
-		$path = $this->_cleanPath( $path );
+		$path = $this->clean_path( $path );
 
 		// Check to make sure path is inside cache folder, we do not want to delete Joomla root!
-		$pos = strpos( $path, $this->_cleanPath( $this->_root ) );
+		$pos = strpos( $path, $this->clean_path( $this->root ) );
 
 		if ( $pos === false || $pos > 0 ) {
-			JError::raiseWarning( 500, 'JCacheStorageFile::_deleteFolder' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path ) );
+			JError::raiseWarning( 500, 'JCacheStorageFile::delete_folder' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path ) );
 
 			return false;
 		}
 
 		// Remove all the files in folder if they exist; disable all filtering
-		$files = $this->_filesInFolder( $path, '.', false, true, array(), array() );
+		$files = $this->files_in_folder( $path, '.', false, true, array(), array() );
 
 		if ( ! empty( $files ) && ! is_array( $files ) ) {
 			if ( @unlink( $files ) !== true ) {
@@ -298,7 +297,7 @@ class StorageFile {
 		} else if ( ! empty( $files ) && is_array( $files ) ) {
 
 			foreach ( $files as $file ) {
-				$file = $this->_cleanPath( $file );
+				$file = $this->clean_path( $file );
 
 				// In case of restricted permissions we zap it one way or the other
 				// as long as the owner is either the webserver or the ftp
@@ -306,7 +305,7 @@ class StorageFile {
 					// Do nothing
 				} else {
 					$filename = basename( $file );
-					JError::raiseWarning( 'SOME_ERROR_CODE', 'JCacheStorageFile::_deleteFolder' . JText::sprintf( 'JLIB_FILESYSTEM_DELETE_FAILED', $filename ) );
+					JError::raiseWarning( 'SOME_ERROR_CODE', 'JCacheStorageFile::delete_folder' . JText::sprintf( 'JLIB_FILESYSTEM_DELETE_FAILED', $filename ) );
 
 					return false;
 				}
@@ -314,7 +313,7 @@ class StorageFile {
 		}
 
 		// Remove sub-folders of folder; disable all filtering
-		$folders = $this->_folders( $path, '.', false, true, array(), array() );
+		$folders = $this->folders( $path, '.', false, true, array(), array() );
 
 		foreach ( $folders as $folder ) {
 			if ( is_link( $folder ) ) {
@@ -322,7 +321,7 @@ class StorageFile {
 				if ( @unlink( $folder ) !== true ) {
 					return false;
 				}
-			} elseif ( $this->_deleteFolder( $folder ) !== true ) {
+			} elseif ( $this->delete_folder( $folder ) !== true ) {
 				return false;
 			}
 		}
@@ -332,7 +331,7 @@ class StorageFile {
 		if ( @rmdir( $path ) ) {
 			$ret = true;
 		} else {
-			JError::raiseWarning( 'SOME_ERROR_CODE', 'JCacheStorageFile::_deleteFolder' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_FOLDER_DELETE', $path ) );
+			JError::raiseWarning( 'SOME_ERROR_CODE', 'JCacheStorageFile::delete_folder' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_FOLDER_DELETE', $path ) );
 			$ret = false;
 		}
 
@@ -348,11 +347,11 @@ class StorageFile {
 	 * @return    string    The cleaned path
 	 * @since    1.6
 	 */
-	private function _cleanPath( $path, $ds = DS ) {
+	private function clean_path( $path, $ds = DS ) {
 		$path = trim( $path );
 
 		if ( empty( $path ) ) {
-			$path = $this->_root;
+			$path = $this->root;
 		} else {
 			// Remove double slashes and backslahses and convert all slashes and backslashes to DS
 			$path = preg_replace( '#[/\\\\]+#', $ds, $path );
@@ -375,7 +374,7 @@ class StorageFile {
 	 * @return    array    Files in the given folder.
 	 * @since 1.6
 	 */
-	private function _filesInFolder(
+	private function files_in_folder(
 		$path, $filter = '.', $recurse = false, $fullpath = false, $exclude = array(
 		'.svn',
 		'CVS',
@@ -387,11 +386,11 @@ class StorageFile {
 		$arr = array();
 
 		// Check to make sure the path valid and clean
-		$path = $this->_cleanPath( $path );
+		$path = $this->clean_path( $path );
 
 		// Is the path a folder?
 		if ( ! is_dir( $path ) ) {
-			JError::raiseWarning( 21, 'JCacheStorageFile::_filesInFolder' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path ) );
+			JError::raiseWarning( 21, 'JCacheStorageFile::files_in_folder' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path ) );
 
 			return false;
 		}
@@ -410,9 +409,9 @@ class StorageFile {
 				if ( $isDir ) {
 					if ( $recurse ) {
 						if ( is_integer( $recurse ) ) {
-							$arr2 = $this->_filesInFolder( $dir, $filter, $recurse - 1, $fullpath );
+							$arr2 = $this->files_in_folder( $dir, $filter, $recurse - 1, $fullpath );
 						} else {
-							$arr2 = $this->_filesInFolder( $dir, $filter, $recurse, $fullpath );
+							$arr2 = $this->files_in_folder( $dir, $filter, $recurse, $fullpath );
 						}
 
 						$arr = array_merge( $arr, $arr2 );
@@ -449,7 +448,7 @@ class StorageFile {
 	 * @return    array    Folders in the given folder.
 	 * @since 1.6
 	 */
-	private function _folders(
+	private function folders(
 		$path, $filter = '.', $recurse = false, $fullpath = false, $exclude = array(
 		'.svn',
 		'CVS',
@@ -461,11 +460,11 @@ class StorageFile {
 		$arr = array();
 
 		// Check to make sure the path valid and clean
-		$path = $this->_cleanPath( $path );
+		$path = $this->clean_path( $path );
 
 		// Is the path a folder?
 		if ( ! is_dir( $path ) ) {
-			JError::raiseWarning( 21, 'JCacheStorageFile::_folders' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path ) );
+			JError::raiseWarning( 21, 'JCacheStorageFile::folders' . JText::sprintf( 'JLIB_FILESYSTEM_ERROR_PATH_IS_NOT_A_FOLDER', $path ) );
 
 			return false;
 		}
@@ -493,9 +492,9 @@ class StorageFile {
 					}
 					if ( $recurse ) {
 						if ( is_integer( $recurse ) ) {
-							$arr2 = $this->_folders( $dir, $filter, $recurse - 1, $fullpath, $exclude, $excludefilter );
+							$arr2 = $this->folders( $dir, $filter, $recurse - 1, $fullpath, $exclude, $excludefilter );
 						} else {
-							$arr2 = $this->_folders( $dir, $filter, $recurse, $fullpath, $exclude, $excludefilter );
+							$arr2 = $this->folders( $dir, $filter, $recurse, $fullpath, $exclude, $excludefilter );
 						}
 
 						$arr = array_merge( $arr, $arr2 );
