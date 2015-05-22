@@ -7,7 +7,9 @@
  */
 namespace Ostoolbar\Model;
 
+use Ostoolbar\Cache;
 use Ostoolbar\Model;
+use Ostoolbar\Request;
 
 class HelpPage extends Model {
 	protected $option = null;
@@ -19,7 +21,7 @@ class HelpPage extends Model {
 	protected $total = null;
 
 	public function getData() {
-		$data = OST_Cache::callback( $this, '_fetchList', array(), null, true );
+		$data = Cache::callback( $this, '_fetchList', array(), null, true );
 
 		return $data;
 	}
@@ -28,7 +30,7 @@ class HelpPage extends Model {
 
 		$data = array( 'resource' => 'help' );
 
-		$response = OST_RequestHelper::makeRequest( $data );
+		$response = Request::makeRequest( $data );
 
 		if ( $response->hasError() ) :
 			$this->setError( __( 'OSToolbar Error' ) . ':  ' . $response->getErrorMsg() . ' (' . __( 'Code' ) . ' ' . $response->getErrorCode() . ')' );

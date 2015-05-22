@@ -7,7 +7,9 @@
  */
 namespace Ostoolbar\Model;
 
+use Ostoolbar\Cache;
 use Ostoolbar\Model;
+use Ostoolbar\Request;
 
 class Help extends Model {
 	public function listen() {
@@ -93,8 +95,8 @@ class Help extends Model {
 		for ( $i = 0; $i < count( $data ); $i ++ ) {
 			$d = $data[ $i ];
 			if ( $d->id == $this->getState( 'id' ) ) {
-				$d->introtext = OST_RequestHelper::filter( $d->introtext );
-				$d->fulltext  = OST_RequestHelper::filter( $d->fulltext );
+				$d->introtext = Request::filter( $d->introtext );
+				$d->fulltext  = Request::filter( $d->fulltext );
 
 				return $d;
 			}
@@ -104,7 +106,7 @@ class Help extends Model {
 	}
 
 	public function getList() {
-		$data = OST_Cache::callback( $this, '_fetchList', array(), null, true );
+		$data = Cache::callback( $this, '_fetchList', array(), null, true );
 
 		return $data;
 	}
@@ -113,7 +115,7 @@ class Help extends Model {
 
 		$data = array( 'resource' => 'helparticles' );
 
-		$response = OST_RequestHelper::makeRequest( $data );
+		$response = Request::makeRequest( $data );
 
 		if ( $response->hasError() ) :
 			$this->setError( __( 'OSToolbar Error' ) . ':  ' . $response->getErrorMsg() . ' (' . __( 'Code' ) . ' ' . $response->getErrorCode() . ')' );
