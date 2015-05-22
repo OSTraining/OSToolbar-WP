@@ -39,7 +39,7 @@ class Application {
 		add_action( 'admin_menu', array( $this, 'init_admin_links' ) );
 		add_action( 'admin_head', array( $this, 'load_js' ) );
 
-		if ( $_GET['page'] == 'ostoolbar' ) {
+		if ( isset($_GET['page']) && $_GET['page'] == 'ostoolbar' ) {
 			add_action( 'admin_notices', array( $this, 'api_key_check' ) );
 		}
 		add_action( 'init', array( $this, 'add_editor_button' ) );
