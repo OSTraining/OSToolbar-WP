@@ -7,7 +7,7 @@
  */
 namespace Ostoolbar\Rest;
 
-defined( 'ABSPATH' ) or die();
+defined('ABSPATH') or die();
 
 /**
  * Class Error
@@ -16,7 +16,8 @@ defined( 'ABSPATH' ) or die();
  *
  * @package Ostoolbar\Rest
  */
-class Error {
-	public $code = null;
-	public $message = null;
+class Error
+{
+    public $code    = null;
+    public $message = null;
 }
