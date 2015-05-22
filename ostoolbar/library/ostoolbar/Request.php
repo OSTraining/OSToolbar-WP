@@ -10,7 +10,7 @@ namespace Ostoolbar;
 defined( 'ABSPATH' ) or die();
 
 abstract class Request {
-	public static $host_url = 'http://www.ostraining.com/index.php?option=com_api&v=wp';
+	public static $host_url = 'https://www.ostraining.com/index.php?option=com_api&v=wp';
 	public static $is_trial = false;
 
 	public static function is_trial() {
