@@ -34,7 +34,7 @@ class Controller {
 			         align="absmiddle"/> Tutorials</h2>
 			<?php
 			$api_key = get_option( 'api_key' );
-			if ( Request::$isTrial ) {
+			if ( Request::$is_trial ) {
 				if ( $api_key ) {
 					echo '<div class="error">'
 					     . 'Your API key is invalid. Please enter an API key in the'

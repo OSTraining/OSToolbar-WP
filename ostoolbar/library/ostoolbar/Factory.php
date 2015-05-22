@@ -46,6 +46,14 @@ abstract class Factory {
 	}
 
 	/**
+	 * @return Cache\StorageFile
+	 */
+	public static function getCacheStorage()
+	{
+		return static::getInstance('\Ostoolbar\Cache\StorageFile');
+	}
+
+	/**
 	 * Generic factory method
 	 *
 	 * @param $class_name

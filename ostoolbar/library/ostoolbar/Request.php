@@ -11,14 +11,14 @@ defined( 'ABSPATH' ) or die();
 
 class Request {
 	static $host_url = 'http://www.ostraining.com/index.php?option=com_api&v=wp';
-	static $isTrial = false;
+	static $is_trial = false;
 
-	public function isTrial() {
+	public static function is_trial() {
 		self::$host_url = "http://www.ostraining.com/index.php?option=com_api&v=wp_trial";
-		self::$isTrial  = true;
+		self::$is_trial  = true;
 	}
 
-	public function makeRequest( $data ) {
+	public static function makeRequest( $data ) {
 		$api_key = get_option( 'api_key' );
 
 		$static_data = array(
@@ -32,7 +32,7 @@ class Request {
 
 		$data = array_merge( $data, $static_data );
 
-		$response = RestRequest::send( self::$host_url, $data );
+		$response = Rest\Request::send( self::$host_url, $data );
 
 		if ( $body = $response->getBody() ) :
 			$response->setBody( json_decode( $body ) );
