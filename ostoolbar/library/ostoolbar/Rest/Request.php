@@ -21,10 +21,10 @@ class Request
      */
     public static function send($url, $data = null, $method = 'GET', $curlOptions = array())
     {
-        $data   = self::prepareData($data);
+        $data   = static::prepareData($data);
         $handle = curl_init();
 
-        self::setCurlOption($handle, CURLOPT_RETURNTRANSFER, true, $curlOptions);
+        static::setCurlOption($handle, CURLOPT_RETURNTRANSFER, true, $curlOptions);
 
         switch ($method) {
             case 'POST':

@@ -46,11 +46,9 @@ class Tutorials extends Model
 
     public function fetchList()
     {
-
         $data = array('resource' => 'articles');
 
         $response = Request::makeRequest($data);
-
         if ($response->hasError()) {
             wp_die(__('OSToolbar Error') . ': ' . __('Please enter an API key in the Setting > OSToolbar.'));
             return false;
