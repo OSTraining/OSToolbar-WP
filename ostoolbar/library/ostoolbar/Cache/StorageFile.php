@@ -96,11 +96,11 @@ class StorageFile
         // Prepend a die string
         $data = $die . $data;
 
-        $_fileopen = @fopen($path, "wb");
+        $fileOpen = @fopen($path, "wb");
 
-        if ($_fileopen) {
+        if ($fileOpen) {
             $len = strlen($data);
-            @fwrite($_fileopen, $data, $len);
+            @fwrite($fileOpen, $data, $len);
             $written = true;
         }
 
@@ -283,10 +283,10 @@ class StorageFile
             return false;
         }
 
-        $path = $this->clean_path($path);
+        $path = $this->cleanPath($path);
 
         // Check to make sure path is inside cache folder, we do not want to delete Joomla root!
-        $pos = strpos($path, $this->clean_path($this->root));
+        $pos = strpos($path, $this->cleanPath($this->root));
 
         if ($pos === false || $pos > 0) {
             // @TODO: Implement error messaging?
@@ -479,15 +479,15 @@ class StorageFile
         $handle = opendir($path);
 
         if (count($excludeFilter)) {
-            $excludeFilter_string = '/(' . implode('|', $excludeFilter) . ')/';
+            $excludeFilterString = '/(' . implode('|', $excludeFilter) . ')/';
         } else {
-            $excludeFilter_string = '';
+            $excludeFilterString = '';
         }
         while (($file = readdir($handle)) !== false) {
             if (($file != '.')
                 && ($file != '..')
                 && (!in_array($file, $exclude))
-                && (empty($excludeFilter_string) || !preg_match($excludeFilter_string, $file))
+                && (empty($excludeFilterString) || !preg_match($excludeFilterString, $file))
             ) {
                 $dir   = $path . '/' . $file;
                 $isDir = is_dir($dir);

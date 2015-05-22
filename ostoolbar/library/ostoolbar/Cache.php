@@ -28,17 +28,17 @@ class Cache
      */
     public static function callback($object, $method, $args = array(), $cacheLifetime = null)
     {
-        $cache = Factory::get_cache_storage();
+        $cache = Factory::getCacheStorage();
 
         if (!$cacheLifetime) {
             $cacheLifetime = static::HALF_DAY;
         }
         $cache->setLifetime($cacheLifetime);
 
-        $response = Request::make_request(array('resource' => 'checkapi'));
-        if ($response->has_error()) {
+        $response = Request::makeRequest(array('resource' => 'checkapi'));
+        if ($response->hasError()) {
             static::$cacheGroup = static::$cacheGroup . '_trial';
-            Request::is_trial();
+            Request::isTrial();
         }
 
         $callback = array($object, $method);
@@ -48,11 +48,11 @@ class Cache
 
         if ($data) {
             $data     = unserialize($data);
-            $response = Request::make_request(array('resource' => 'lastupdate'));
-            if (!$response->has_error()) {
-                $last_update = strtotime($response->get_body());
+            $response = Request::makeRequest(array('resource' => 'lastupdate'));
+            if (!$response->hasError()) {
+                $lastUpdate = strtotime($response->getBody());
                 if (is_array($data)) {
-                    if ((count($data) && strtotime($data[0]->last_update_date) < $last_update)
+                    if ((count($data) && strtotime($data[0]->lastUpdateDate) < $lastUpdate)
                         || count($data) == 0
                     ) {
                         $cache->remove($cacheId, static::$cacheGroup);
