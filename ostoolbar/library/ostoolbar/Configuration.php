@@ -88,7 +88,7 @@ class Configuration {
 	public function api_key_field() {
 		echo '<input type="text" size="55" name="api_key"'
 		     . ' value="' . get_option( 'api_key' ) . '" />'
-		     . __( 'Enter your API Key from <a href="http://OSTraining.com">OSTraining.com</a>', 'ostoolbar' );
+		     . __( 'Enter your API Key from <a href="http://OSTraining.com" target="_blank">OSTraining.com</a>', 'ostoolbar' );
 	}
 
 	public function toolbar_permission_field() {
