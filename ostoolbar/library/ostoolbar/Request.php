@@ -9,13 +9,13 @@ namespace Ostoolbar;
 
 defined( 'ABSPATH' ) or die();
 
-class Request {
-	static $host_url = 'http://www.ostraining.com/index.php?option=com_api&v=wp';
-	static $is_trial = false;
+abstract class Request {
+	public static $host_url = 'http://www.ostraining.com/index.php?option=com_api&v=wp';
+	public static $is_trial = false;
 
 	public static function is_trial() {
-		self::$host_url = "http://www.ostraining.com/index.php?option=com_api&v=wp_trial";
-		self::$is_trial  = true;
+		static::$host_url = "http://www.ostraining.com/index.php?option=com_api&v=wp_trial";
+		static::$is_trial  = true;
 	}
 
 	public static function makeRequest( $data ) {
@@ -26,38 +26,36 @@ class Request {
 			'key'    => $api_key
 		);
 
-		if ( ! isset( $data['app'] ) ) :
+		if ( ! isset( $data['app'] ) ) {
 			$data['app'] = 'tutorials';
-		endif;
-
+		}
 		$data = array_merge( $data, $static_data );
 
-		$response = Rest\Request::send( self::$host_url, $data );
+		$response = Rest\Request::send( static::$host_url, $data );
 
-		if ( $body = $response->getBody() ) :
+		if ( $body = $response->getBody() ) {
 			$response->setBody( json_decode( $body ) );
-		endif;
+		}
 
-		if ( $response->hasError() ) :
+		if ( $response->hasError() ) {
 			$body = $response->getBody();
-			if ( isset( $body->code ) ) :
+			if ( isset( $body->code ) ) {
 				$response->setErrorCode( $body->code );
-			endif;
-			if ( isset( $body->message ) ) :
+			}
+			if ( isset( $body->message ) ) {
 				$response->setErrorMsg( $body->message );
-			endif;
-		endif;
+			}
+		}
 
 		return $response;
 	}
 
 	public static function filter( $text ) {
-		$split   = explode( 'index.php', self::$host_url );
+		$split   = explode( 'index.php', static::$host_url );
 		$ost_url = $split[0];
 
 		$text = preg_replace( '#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#', '$1="' . $ost_url . '$2$3', $text );
 
 		return $text;
 	}
-
 }
