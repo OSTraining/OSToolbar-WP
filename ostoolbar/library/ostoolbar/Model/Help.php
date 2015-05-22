@@ -11,129 +11,137 @@ use Ostoolbar\Cache;
 use Ostoolbar\Model;
 use Ostoolbar\Request;
 
-class Help extends Model {
-	public function listen() {
-		$uri          = $_SERVER['REQUEST_URI'];
-		$split        = explode( "/", $uri );
-		$last         = count( $split ) - 1;
-		$admin_link   = $split[ $last ];
-		$helparticles = $this->get_list();
+class Help extends Model
+{
+    public function listen()
+    {
+        $uri          = $_SERVER['REQUEST_URI'];
+        $split        = explode("/", $uri);
+        $last         = count($split) - 1;
+        $adminLink   = $split[$last];
+        $helpArticles = $this->getList();
 
-		if ( $msg = $this->get_error() ) {
-			if ( strpos( $msg, 'API Key Not Found' ) !== false ) {
-				$msg .= ". Fix this <a href='options-general.php?page=options-ostoolbar'>here</a>.";
-			}
-			echo $msg;
+        if ($msg = $this->getError()) {
+            if (strpos($msg, 'API Key Not Found') !== false) {
+                $msg .= ". Fix this <a href='options-general.php?page=options-ostoolbar'>here</a>.";
+            }
+            echo $msg;
 
-			return false;
-		}
+            return;
+        }
 
-		if ( $article = $this->search( $admin_link, $helparticles ) ) {
-			$link = 'admin.php?page=ostoolbar&help=' . $article->id;;
-			echo '<a href="javascript:ostoolbar_popup(\'' . $link . '\', \'' . $article->title . '\');">' . $article->title . '</a>';
-		}
+        if ($article = $this->search($adminLink, $helpArticles)) {
+            $link = 'admin.php?page=ostoolbar&help=' . $article->id;
 
-	}
+            echo '<a href="javascript:ostoolbar_popup(\'' . $link . '\', \'' . $article->title . '\');">'
+                . $article->title
+                . '</a>';
+        }
+    }
 
-	private function search( $admin_link, $helparticles ) {
-		$admin_uri = $this->parse_uri( $admin_link );
+    private function search($adminLink, $helpArticles)
+    {
+        $adminUri = $this->parseUri($adminLink);
 
-		for ( $i = 0; $i < count( $helparticles ); $i ++ ) {
-			$h      = $helparticles[ $i ];
-			$parsed = $this->parse_uri( $h->url );
-			if ( $h->url_exact ) {
-				if ( $parsed['hash'] == $admin_uri['hash'] ) {
-					return $h;
-				}
-			} elseif ( $parsed['page'] == $admin_uri['page'] ) {
-				if ( ! $parsed['vars'] ) {
-					return $h;
-				}
-				// Compare keys
-				$admin_keys  = array_keys( $admin_uri['vars'] );
-				$parsed_keys = array_keys( $parsed['vars'] );
+        for ($i = 0; $i < count($helpArticles); $i++) {
+            $h      = $helpArticles[$i];
+            $parsed = $this->parseUri($h->url);
+            if ($h->url_exact) {
+                if ($parsed['hash'] == $adminUri['hash']) {
+                    return $h;
+                }
+            } elseif ($parsed['page'] == $adminUri['page']) {
+                if (!$parsed['vars']) {
+                    return $h;
+                }
+                // Compare keys
+                $adminKeys  = array_keys($adminUri['vars']);
+                $parsedKeys = array_keys($parsed['vars']);
 
-				$intersect = array_intersect( $parsed_keys, $admin_keys );
-				if ( count( $intersect ) == count( $parsed_keys ) ) {
-					$compare = array();
-					foreach ( $intersect as $index ) {
-						$compare[ $index ] = $admin_uri['vars'][ $index ];
-					}
-					ksort( $compare );
+                $intersect = array_intersect($parsedKeys, $adminKeys);
+                if (count($intersect) == count($parsedKeys)) {
+                    $compare = array();
+                    foreach ($intersect as $index) {
+                        $compare[$index] = $adminUri['vars'][$index];
+                    }
+                    ksort($compare);
 
-					if ( md5( serialize( $compare ) ) == md5( serialize( $parsed['vars'] ) ) ) {
-						return $h;
-					}
-				}
+                    if (md5(serialize($compare)) == md5(serialize($parsed['vars']))) {
+                        return $h;
+                    }
+                }
 
-			}
-		}
+            }
+        }
 
-		return false;
+        return false;
 
-	}
+    }
 
-	protected function parse_uri( $uri ) {
-		list( $page, $query ) = explode( "?", $uri );
-		$vars = array();
-		if ( $query ) {
-			parse_str( $query, $vars );
-		}
+    protected function parseUri($uri)
+    {
+        list($page, $query) = explode("?", $uri);
+        $vars = array();
+        if ($query) {
+            parse_str($query, $vars);
+        }
 
-		ksort( $vars );
+        ksort($vars);
 
-		$hash = $page;
-		if ( $vars ) {
-			$hash .= md5( serialize( $vars ) );
-		}
+        $hash = $page;
+        if ($vars) {
+            $hash .= md5(serialize($vars));
+        }
 
-		return compact( 'page', 'vars', 'hash' );
-	}
+        return compact('page', 'vars', 'hash');
+    }
 
-	public function get_data() {
-		$data = $this->get_list();
-		for ( $i = 0; $i < count( $data ); $i ++ ) {
-			$d = $data[ $i ];
-			if ( $d->id == $this->get_state( 'id' ) ) {
-				$d->introtext = Request::filter( $d->introtext );
-				$d->fulltext  = Request::filter( $d->fulltext );
+    public function getData()
+    {
+        $data = $this->getList();
+        for ($i = 0; $i < count($data); $i++) {
+            $d = $data[$i];
+            if ($d->id == $this->getState('id')) {
+                $d->introtext = Request::filter($d->introtext);
+                $d->fulltext  = Request::filter($d->fulltext);
 
-				return $d;
-			}
-		}
+                return $d;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public function get_list() {
-		$data = Cache::callback( $this, 'fetch_list', array(), null, true );
+    public function getList()
+    {
+        $data = Cache::callback($this, 'fetchList', array(), null, true);
 
-		return $data;
-	}
+        return $data;
+    }
 
-	public function fetch_list() {
+    public function fetchList()
+    {
 
-		$data = array( 'resource' => 'helparticles' );
+        $data = array('resource' => 'helpArticles');
 
-		$response = Request::make_request( $data );
+        $response = Request::makeRequest($data);
 
-		if ( $response->has_error() ) :
-			$this->set_error(
-				__( 'OSToolbar Error' ) . ':  '
-				. $response->get_error_msg()
-				. ' (' . __( 'Code' ) . ' ' . $response->get_error_code() . ')'
-			);
+        if ($response->hasError()) :
+            $this->setError(
+                __('OSToolbar Error') . ':  '
+                . $response->getErrorMsg()
+                . ' (' . __('Code') . ' ' . $response->getErrorCode() . ')'
+            );
 
-			return false;
-		endif;
+            return false;
+        endif;
 
-		$list = $response->get_body();
+        $list = $response->getBody();
 
-		for ( $i = 0; $i < count( $list ); $i ++ ) :
-			$list[ $i ]->link = 'admin.php?page=ostoolbar&id=' . $list[ $i ]->id;
-		endfor;
+        for ($i = 0; $i < count($list); $i++) :
+            $list[$i]->link = 'admin.php?page=ostoolbar&id=' . $list[$i]->id;
+        endfor;
 
-		return $list;
-	}
-
+        return $list;
+    }
 }

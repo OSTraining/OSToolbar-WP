@@ -11,28 +11,30 @@ use Ostoolbar\Factory;
 use Ostoolbar\Model;
 use Ostoolbar\Request;
 
-class Tutorial extends Model {
-	protected $data = null;
+class Tutorial extends Model
+{
+    protected $data = null;
 
-	public function get_data() {
-		$id = $this->get_state( 'id' );
+    public function getData()
+    {
+        $id = $this->getState('id');
 
-		/** @var Tutorials $model */
-		$model = Factory::get_model( 'Tutorials' );
+        /** @var Tutorials $model */
+        $model = Factory::get_model('Tutorials');
 
-		$tutorials = $model->get_list();
-		if ( is_array( $tutorials ) ) {
-			foreach ( $tutorials as $tutorial ) {
-				if ( $tutorial->id == $id ) {
-					$tutorial->introtext = Request::filter( $tutorial->introtext );
-					$tutorial->fulltext  = Request::filter( $tutorial->fulltext );
+        $tutorials = $model->getList();
+        if (is_array($tutorials)) {
+            foreach ($tutorials as $tutorial) {
+                if ($tutorial->id == $id) {
+                    $tutorial->introtext = Request::filter($tutorial->introtext);
+                    $tutorial->fulltext  = Request::filter($tutorial->fulltext);
 
-					$this->data = $tutorial;
-					break;
-				}
-			}
-		}
+                    $this->data = $tutorial;
+                    break;
+                }
+            }
+        }
 
-		return $this->data;
-	}
+        return $this->data;
+    }
 }

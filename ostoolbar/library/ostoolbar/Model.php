@@ -7,41 +7,46 @@
  */
 namespace Ostoolbar;
 
-defined( 'ABSPATH' ) or die();
+defined('ABSPATH') or die();
 
-class Model {
-	protected $state = array();
-	protected $errors = array();
+class Model
+{
+    protected $state  = array();
+    protected $errors = array();
 
-	public function set_state( $key, $value ) {
-		$this->state[ $key ] = $value;
+    public function setState($key, $value)
+    {
+        $this->state[$key] = $value;
 
-		return true;
-	}
+        return true;
+    }
 
-	public function get_state( $key ) {
-		if ( isset( $this->state[ $key ] ) ) {
-			return $this->state[ $key ];
-		} else {
-			return false;
-		}
-	}
+    public function getState($key)
+    {
+        if (isset($this->state[$key])) {
+            return $this->state[$key];
+        } else {
+            return false;
+        }
+    }
 
-	public function set_error( $msg ) {
-		$this->errors[] = $msg;
-	}
+    public function setError($msg)
+    {
+        $this->errors[] = $msg;
+    }
 
-	public function get_error( $all = false ) {
-		if ( empty( $this->errors ) ) {
-			return false;
-		}
+    public function getError($all = false)
+    {
+        if (empty($this->errors)) {
+            return false;
+        }
 
-		if ( $all ) {
-			return $this->errors;
-		}
+        if ($all) {
+            return $this->errors;
+        }
 
-		$last = count( $this->errors ) - 1;
+        $last = count($this->errors) - 1;
 
-		return $this->errors[ $last ];
-	}
+        return $this->errors[$last];
+    }
 }

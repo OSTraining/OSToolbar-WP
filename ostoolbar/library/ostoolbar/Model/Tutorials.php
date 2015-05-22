@@ -11,55 +11,57 @@ use Ostoolbar\Cache;
 use Ostoolbar\Model;
 use Ostoolbar\Request;
 
-defined( 'ABSPATH' ) or die();
+defined('ABSPATH') or die();
 
-class Tutorials extends Model {
-	protected $option = null;
-	protected $view = null;
-	protected $context = null;
-	protected $pagination = null;
+class Tutorials extends Model
+{
+    protected $option     = null;
+    protected $view       = null;
+    protected $context    = null;
+    protected $pagination = null;
 
-	protected $list = null;
-	protected $total = null;
+    protected $list  = null;
+    protected $total = null;
 
-	public function get_list() {
-		$data = Cache::callback( $this, 'fetch_list', array(), null, true );
+    public function getList()
+    {
+        $data = Cache::callback($this, 'fetchList', array(), null, true);
 
-		$videos = preg_split( "/,/", get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
-		if ( count( $videos ) ) {
-			$temp = array();
-			foreach ( $videos as $item ) {
-				foreach ( $data as $row ) {
-					if ( $row->id == $item ) {
-						$temp[] = $row;
-						break;
-					}
-				}
-			}
-			$data = $temp;
-		}
+        $videos = preg_split("/,/", get_option('videos'), -1, PREG_SPLIT_NO_EMPTY);
+        if (count($videos)) {
+            $temp = array();
+            foreach ($videos as $item) {
+                foreach ($data as $row) {
+                    if ($row->id == $item) {
+                        $temp[] = $row;
+                        break;
+                    }
+                }
+            }
+            $data = $temp;
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
-	public function fetch_list() {
+    public function fetchList()
+    {
 
-		$data = array( 'resource' => 'articles' );
+        $data = array('resource' => 'articles');
 
-		$response = Request::make_request( $data );
+        $response = Request::makeRequest($data);
 
-		if ( $response->has_error() ) {
-			wp_die( __( 'OSToolbar Error' ) . ': ' . __( 'Please enter an API key in the Setting > OSToolbar.' ) );
+        if ($response->hasError()) {
+            wp_die(__('OSToolbar Error') . ': ' . __('Please enter an API key in the Setting > OSToolbar.'));
+            return false;
+        }
 
-			return false;
-		}
+        $list = $response->getBody();
 
-		$list = $response->get_body();
+        for ($i = 0; $i < count($list); $i++) {
+            $list[$i]->link = 'admin.php?page=ostoolbar&id=' . $list[$i]->id;
+        }
 
-		for ( $i = 0; $i < count( $list ); $i ++ ) {
-			$list[ $i ]->link = 'admin.php?page=ostoolbar&id=' . $list[ $i ]->id;
-		}
-
-		return $list;
-	}
+        return $list;
+    }
 }

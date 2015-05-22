@@ -11,36 +11,41 @@ use Ostoolbar\Cache;
 use Ostoolbar\Model;
 use Ostoolbar\Request;
 
-class HelpPage extends Model {
-	protected $option = null;
-	protected $view = null;
-	protected $context = null;
-	protected $pagination = null;
+class HelpPage extends Model
+{
+    protected $option     = null;
+    protected $view       = null;
+    protected $context    = null;
+    protected $pagination = null;
 
-	protected $list = null;
-	protected $total = null;
+    protected $list  = null;
+    protected $total = null;
 
-	public function get_data() {
-		$data = Cache::callback( $this, 'fetch_list', array(), null, true );
+    public function getData()
+    {
+        $data = Cache::callback($this, 'fetchList', array(), null, true);
 
-		return $data;
-	}
+        return $data;
+    }
 
-	public function fetch_list() {
+    public function fetchList()
+    {
+        $data = array('resource' => 'help');
 
-		$data = array( 'resource' => 'help' );
+        $response = Request::makeRequest($data);
 
-		$response = Request::make_request( $data );
+        if ($response->hasError()) :
+            $this->setError(
+                __('OSToolbar Error') . ':  '
+                . $response->getErrorMsg()
+                . ' (' . __('Code') . ' ' . $response->getErrorCode() . ')'
+            );
 
-		if ( $response->has_error() ) :
-			$this->set_error( __( 'OSToolbar Error' ) . ':  ' . $response->get_error_msg() . ' (' . __( 'Code' ) . ' ' . $response->get_error_code() . ')' );
+            return false;
+        endif;
 
-			return false;
-		endif;
+        $list = $response->getBody();
 
-		$list = $response->get_body();
-
-		return $list;
-	}
-
+        return $list;
+    }
 }
