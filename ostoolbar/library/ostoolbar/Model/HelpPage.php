@@ -20,25 +20,25 @@ class HelpPage extends Model {
 	protected $list = null;
 	protected $total = null;
 
-	public function getData() {
-		$data = Cache::callback( $this, '_fetchList', array(), null, true );
+	public function get_data() {
+		$data = Cache::callback( $this, 'fetch_list', array(), null, true );
 
 		return $data;
 	}
 
-	public function _fetchList() {
+	public function fetch_list() {
 
 		$data = array( 'resource' => 'help' );
 
-		$response = Request::makeRequest( $data );
+		$response = Request::make_request( $data );
 
-		if ( $response->hasError() ) :
-			$this->setError( __( 'OSToolbar Error' ) . ':  ' . $response->getErrorMsg() . ' (' . __( 'Code' ) . ' ' . $response->getErrorCode() . ')' );
+		if ( $response->has_error() ) :
+			$this->set_error( __( 'OSToolbar Error' ) . ':  ' . $response->get_error_msg() . ' (' . __( 'Code' ) . ' ' . $response->get_error_code() . ')' );
 
 			return false;
 		endif;
 
-		$list = $response->getBody();
+		$list = $response->get_body();
 
 		return $list;
 	}

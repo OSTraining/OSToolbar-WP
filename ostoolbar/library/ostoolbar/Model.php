@@ -13,13 +13,13 @@ class Model {
 	protected $state = array();
 	protected $errors = array();
 
-	public function setState( $key, $value ) {
+	public function set_state( $key, $value ) {
 		$this->state[ $key ] = $value;
 
 		return true;
 	}
 
-	public function getState( $key ) {
+	public function get_state( $key ) {
 		if ( isset( $this->state[ $key ] ) ) {
 			return $this->state[ $key ];
 		} else {
@@ -27,11 +27,11 @@ class Model {
 		}
 	}
 
-	public function setError( $msg ) {
+	public function set_error( $msg ) {
 		$this->errors[] = $msg;
 	}
 
-	public function getError( $all = false ) {
+	public function get_error( $all = false ) {
 		if ( empty( $this->errors ) ) {
 			return false;
 		}

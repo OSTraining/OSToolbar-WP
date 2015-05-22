@@ -18,7 +18,7 @@ abstract class Request {
 		static::$is_trial  = true;
 	}
 
-	public static function makeRequest( $data ) {
+	public static function make_request( $data ) {
 		$api_key = get_option( 'api_key' );
 
 		$static_data = array(
@@ -33,17 +33,17 @@ abstract class Request {
 
 		$response = Rest\Request::send( static::$host_url, $data );
 
-		if ( $body = $response->getBody() ) {
-			$response->setBody( json_decode( $body ) );
+		if ( $body = $response->get_body() ) {
+			$response->set_body( json_decode( $body ) );
 		}
 
-		if ( $response->hasError() ) {
-			$body = $response->getBody();
+		if ( $response->has_error() ) {
+			$body = $response->get_body();
 			if ( isset( $body->code ) ) {
-				$response->setErrorCode( $body->code );
+				$response->set_error_code( $body->code );
 			}
 			if ( isset( $body->message ) ) {
-				$response->setErrorMsg( $body->message );
+				$response->set_error_msg( $body->message );
 			}
 		}
 

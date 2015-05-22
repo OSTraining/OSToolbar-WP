@@ -22,8 +22,8 @@ class Tutorials extends Model {
 	protected $list = null;
 	protected $total = null;
 
-	public function getList() {
-		$data = Cache::callback( $this, '_fetchList', array(), null, true );
+	public function get_list() {
+		$data = Cache::callback( $this, 'fetch_list', array(), null, true );
 
 		$videos = preg_split( "/,/", get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
 		if ( count( $videos ) ) {
@@ -42,19 +42,19 @@ class Tutorials extends Model {
 		return $data;
 	}
 
-	public function _fetchList() {
+	public function fetch_list() {
 
 		$data = array( 'resource' => 'articles' );
 
-		$response = Request::makeRequest( $data );
+		$response = Request::make_request( $data );
 
-		if ( $response->hasError() ) {
+		if ( $response->has_error() ) {
 			wp_die( __( 'OSToolbar Error' ) . ': ' . __( 'Please enter an API key in the Setting > OSToolbar.' ) );
 
 			return false;
 		}
 
-		$list = $response->getBody();
+		$list = $response->get_body();
 
 		for ( $i = 0; $i < count( $list ); $i ++ ) {
 			$list[ $i ]->link = 'admin.php?page=ostoolbar&id=' . $list[ $i ]->id;

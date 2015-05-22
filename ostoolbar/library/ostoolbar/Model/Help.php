@@ -17,9 +17,9 @@ class Help extends Model {
 		$split        = explode( "/", $uri );
 		$last         = count( $split ) - 1;
 		$admin_link   = $split[ $last ];
-		$helparticles = $this->getList();
+		$helparticles = $this->get_list();
 
-		if ( $msg = $this->getError() ) {
+		if ( $msg = $this->get_error() ) {
 			if ( strpos( $msg, 'API Key Not Found' ) !== false ) {
 				$msg .= ". Fix this <a href='options-general.php?page=options-ostoolbar'>here</a>.";
 			}
@@ -36,11 +36,11 @@ class Help extends Model {
 	}
 
 	private function search( $admin_link, $helparticles ) {
-		$admin_uri = $this->parseURI( $admin_link );
+		$admin_uri = $this->parse_uri( $admin_link );
 
 		for ( $i = 0; $i < count( $helparticles ); $i ++ ) {
 			$h      = $helparticles[ $i ];
-			$parsed = $this->parseURI( $h->url );
+			$parsed = $this->parse_uri( $h->url );
 			if ( $h->url_exact ) {
 				if ( $parsed['hash'] == $admin_uri['hash'] ) {
 					return $h;
@@ -73,7 +73,7 @@ class Help extends Model {
 
 	}
 
-	private function parseURI( $uri ) {
+	protected function parse_uri( $uri ) {
 		list( $page, $query ) = explode( "?", $uri );
 		$vars = array();
 		if ( $query ) {
@@ -90,11 +90,11 @@ class Help extends Model {
 		return compact( 'page', 'vars', 'hash' );
 	}
 
-	public function getData() {
-		$data = $this->getList();
+	public function get_data() {
+		$data = $this->get_list();
 		for ( $i = 0; $i < count( $data ); $i ++ ) {
 			$d = $data[ $i ];
-			if ( $d->id == $this->getState( 'id' ) ) {
+			if ( $d->id == $this->get_state( 'id' ) ) {
 				$d->introtext = Request::filter( $d->introtext );
 				$d->fulltext  = Request::filter( $d->fulltext );
 
@@ -105,25 +105,29 @@ class Help extends Model {
 		return null;
 	}
 
-	public function getList() {
-		$data = Cache::callback( $this, '_fetchList', array(), null, true );
+	public function get_list() {
+		$data = Cache::callback( $this, 'fetch_list', array(), null, true );
 
 		return $data;
 	}
 
-	public function _fetchList() {
+	public function fetch_list() {
 
 		$data = array( 'resource' => 'helparticles' );
 
-		$response = Request::makeRequest( $data );
+		$response = Request::make_request( $data );
 
-		if ( $response->hasError() ) :
-			$this->setError( __( 'OSToolbar Error' ) . ':  ' . $response->getErrorMsg() . ' (' . __( 'Code' ) . ' ' . $response->getErrorCode() . ')' );
+		if ( $response->has_error() ) :
+			$this->set_error(
+				__( 'OSToolbar Error' ) . ':  '
+				. $response->get_error_msg()
+				. ' (' . __( 'Code' ) . ' ' . $response->get_error_code() . ')'
+			);
 
 			return false;
 		endif;
 
-		$list = $response->getBody();
+		$list = $response->get_body();
 
 		for ( $i = 0; $i < count( $list ); $i ++ ) :
 			$list[ $i ]->link = 'admin.php?page=ostoolbar&id=' . $list[ $i ]->id;

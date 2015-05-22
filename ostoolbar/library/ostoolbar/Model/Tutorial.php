@@ -14,13 +14,13 @@ use Ostoolbar\Request;
 class Tutorial extends Model {
 	protected $data = null;
 
-	public function getData() {
-		$id = $this->getState( 'id' );
+	public function get_data() {
+		$id = $this->get_state( 'id' );
 
 		/** @var Tutorials $model */
-		$model = Factory::getModel( 'Tutorials' );
+		$model = Factory::get_model( 'Tutorials' );
 
-		$tutorials = $model->getList();
+		$tutorials = $model->get_list();
 		if ( is_array( $tutorials ) ) {
 			foreach ( $tutorials as $tutorial ) {
 				if ( $tutorial->id == $id ) {

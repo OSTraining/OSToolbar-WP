@@ -22,29 +22,29 @@ abstract class Factory {
 	 *
 	 * @return Application
 	 */
-	public static function getApplication() {
-		return static::getInstance( '\Ostoolbar\Application' );
+	public static function get_application() {
+		return static::get_instance( '\Ostoolbar\Application' );
 	}
 
 	/**
 	 * @return Configuration
 	 */
-	public static function getConfiguration() {
-		return static::getInstance('\Ostoolbar\Configuration');
+	public static function get_configuration() {
+		return static::get_instance('\Ostoolbar\Configuration');
 	}
 
 	/**
 	 * @return Controller
 	 */
-	public static function getController() {
-		return static::getInstance('\Ostoolbar\Controller');
+	public static function get_controller() {
+		return static::get_instance('\Ostoolbar\Controller');
 	}
 
 	/**
 	 * @return Sanitize
 	 */
-	public static function getSanitize() {
-		return static::getInstance('\Ostoolbar\Sanitize');
+	public static function get_sanitize() {
+		return static::get_instance('\Ostoolbar\Sanitize');
 	}
 
 	/**
@@ -52,17 +52,17 @@ abstract class Factory {
 	 *
 	 * @return Model
 	 */
-	public static function getModel($name)
+	public static function get_model($name)
 	{
-		return static::getInstance('\Ostoolbar\Model\\' . $name);
+		return static::get_instance('\Ostoolbar\Model\\' . $name);
 	}
 
 	/**
 	 * @return Cache\StorageFile
 	 */
-	public static function getCacheStorage()
+	public static function get_cache_storage()
 	{
-		return static::getInstance('\Ostoolbar\Cache\StorageFile');
+		return static::get_instance('\Ostoolbar\Cache\StorageFile');
 	}
 
 	/**
@@ -72,7 +72,7 @@ abstract class Factory {
 	 *
 	 * @return mixed
 	 */
-	protected static function getInstance( $class_name ) {
+	protected static function get_instance( $class_name ) {
 		$key = md5( $class_name );
 		if ( ! isset( static::$instances[ $key ] ) ) {
 			static::$instances[ $key ] = new $class_name();

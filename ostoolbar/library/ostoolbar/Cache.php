@@ -26,15 +26,15 @@ class Cache {
 	 * @return mixed
 	 */
 	public static function callback( $object, $method, $args = array(), $cache_lifetime = null ) {
-		$cache = Factory::getCacheStorage();
+		$cache = Factory::get_cache_storage();
 
 		if ( ! $cache_lifetime ) {
 			$cache_lifetime = static::HALF_DAY;
 		}
 		$cache->setLifetime( $cache_lifetime );
 
-		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
-		if ( $response->hasError() ) {
+		$response = Request::make_request( array( 'resource' => 'checkapi' ) );
+		if ( $response->has_error() ) {
 			static::$cache_group = static::$cache_group . '_trial';
 			Request::is_trial();
 		}
@@ -46,9 +46,9 @@ class Cache {
 
 		if ( $data ) {
 			$data     = unserialize( $data );
-			$response = Request::makeRequest( array( 'resource' => 'lastupdate' ) );
-			if ( ! $response->hasError() ) {
-				$last_update = strtotime( $response->getBody() );
+			$response = Request::make_request( array( 'resource' => 'lastupdate' ) );
+			if ( ! $response->has_error() ) {
+				$last_update = strtotime( $response->get_body() );
 				if ( is_array( $data ) ) {
 					if ( ( count( $data ) && strtotime( $data[0]->last_update_date ) < $last_update )
 					     || count( $data ) == 0

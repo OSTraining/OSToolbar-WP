@@ -2,8 +2,8 @@
 (function() {
 	//alert 'goober';
 	tinymce.create('tinymce.plugins.ostoolbar_plugin_function', {
-		init : function(ed, url) {	
-		
+		init : function(ed, url) {
+
 			// Register command to be executed.
 			ed.addCommand('ostoolbar_plugin_command', function() {
 				window.tinyMCE.execInstanceCommand('content', 'mceInsertContent', false, "[ostoolbar]");
@@ -11,10 +11,10 @@
 			});
 
 			// Register button that will be displayed on wordpress rich editor
-			ed.addButton('ostoolbar_plugin_button', 
+			ed.addButton('ostoolbar_plugin_button',
 				{title:'Tutorials', cmd:'ostoolbar_plugin_command', image:url+'/icon-tutorials.png'});},
 
-				getInfo : function() {
+				get_info : function() {
 					return {
 						longname : 'Show tutorials',
 						author : 'Nguyen Trung Thanh',

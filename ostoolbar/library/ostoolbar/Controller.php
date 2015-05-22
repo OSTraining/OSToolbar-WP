@@ -11,21 +11,21 @@ defined( 'ABSPATH' ) or die();
 
 class Controller {
 	public static function action_tutorials( $isFrontend = false ) {
-		if ( $id = Factory::getSanitize()->get_int('id') ) {
+		if ( $id = Factory::get_sanitize()->get_int('id') ) {
 			static::action_tutorial( $id );
 
 			return;
 		}
 
-		if ( $help = Factory::getSanitize()->get_int('help') ) {
+		if ( $help = Factory::get_sanitize()->get_int('help') ) {
 			static::action_tutorial( $help, true );
 
 			return;
 		}
 
 		/** @var Model\Tutorials $model */
-		$model     = Factory::getModel( 'Tutorials' );
-		$tutorials = $model->getList();
+		$model     = Factory::get_model( 'Tutorials' );
+		$tutorials = $model->get_list();
 
 		$videos = preg_split( '/,/', get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
 		?>
@@ -67,7 +67,7 @@ class Controller {
 					}
 					if ( $isFrontend ) {
 						$link = array(
-							'page_id' => Factory::getSanitize()->get_key('page_id'),
+							'page_id' => Factory::get_sanitize()->get_key('page_id'),
 							'id'      => $tutorials[ $i ]->id
 						);
 					} else {
@@ -93,14 +93,14 @@ class Controller {
 	public static function action_tutorial( $id, $help_article = false ) {
 		if ( $help_article ) {
 			/** @var Model\Help $model */
-			$model = Factory::getModel( 'Help' );
-			$model->setState( 'id', $id );
-			$tutorial = $model->getData();
+			$model = Factory::get_model( 'Help' );
+			$model->set_state( 'id', $id );
+			$tutorial = $model->get_data();
 		} else {
 			/** @var Model\Tutorial $model */
-			$model = Factory::getModel( 'Tutorial' );
-			$model->setState( 'id', $id );
-			$tutorial = $model->getData();
+			$model = Factory::get_model( 'Tutorial' );
+			$model->set_state( 'id', $id );
+			$tutorial = $model->get_data();
 		}
 		?>
 		<div class="wrap">
@@ -117,8 +117,8 @@ class Controller {
 
 	public function action_help() {
 		/** @var Model\HelpPage $model */
-		$model = Factory::getModel( 'HelpPage' );
-		$help  = $model->getData();
+		$model = Factory::get_model( 'HelpPage' );
+		$help  = $model->get_data();
 		?>
 		<div class="wrap">
 			<h2><?php echo $help->title; ?></h2>

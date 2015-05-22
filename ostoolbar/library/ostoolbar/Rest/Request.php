@@ -19,10 +19,10 @@ class Request {
 	 * @return Response
 	 */
 	public static function send( $url, $data = null, $method = 'GET', $curl_options = array() ) {
-		$data   = self::prepareData( $data );
+		$data   = self::prepare_data( $data );
 		$handle = curl_init();
 
-		self::setCurlOption( $handle, CURLOPT_RETURNTRANSFER, true, $curl_options );
+		self::set_curl_option( $handle, CURLOPT_RETURNTRANSFER, true, $curl_options );
 
 		switch ( $method ) {
 			case 'POST':
@@ -59,7 +59,7 @@ class Request {
 	 *
 	 * @return bool
 	 */
-	protected static function setCurlOption( $handle, $name, $value, $curl_options = array() ) {
+	protected static function set_curl_option( $handle, $name, $value, $curl_options = array() ) {
 		$options = array_keys( $curl_options );
 		if ( in_array( $name, $options ) ) {
 			return false;
@@ -75,7 +75,7 @@ class Request {
 	 *
 	 * @return string
 	 */
-	protected static function prepareData( $data ) {
+	protected static function prepare_data( $data ) {
 		if ( is_array( $data ) ) {
 			$data = http_build_query( $data );
 		}

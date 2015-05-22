@@ -78,7 +78,7 @@ class Response {
 	public function __construct( $handle, $receive_headers ) {
 		$this->error = new Error();
 
-		$this->processRequest( $handle, $receive_headers );
+		$this->process_request( $handle, $receive_headers );
 	}
 
 	/**
@@ -87,19 +87,19 @@ class Response {
 	 *
 	 * @return void
 	 */
-	protected function processRequest( $handle, $receive_headers ) {
+	protected function process_request( $handle, $receive_headers ) {
 		$response = curl_exec( $handle );
 
 		if ( $receive_headers ) {
 			list( $headers, $body ) = explode( "\r\n\r\n", $response, 2 );
-			$this->setHeaders( $headers );
+			$this->set_headers( $headers );
 		} else {
 			$body = $response;
 		}
 
-		$this->setBody( $body );
-		$this->setInfo( curl_getinfo( $handle ) );
-		$this->setErrors( $handle );
+		$this->set_body( $body );
+		$this->set_info( curl_getinfo( $handle ) );
+		$this->set_errors( $handle );
 		curl_close( $handle );
 	}
 
@@ -108,7 +108,7 @@ class Response {
 	 *
 	 * @return void
 	 */
-	public function setErrors( $handle ) {
+	public function set_errors( $handle ) {
 		$this->error = new Error();
 
 		if ( $error_code = curl_errno( $handle ) ) {
@@ -116,10 +116,10 @@ class Response {
 			$this->error->message = curl_error( $handle );
 
 		} else {
-			$code = $this->getInfo( 'http_code' );
+			$code = $this->get_info( 'http_code' );
 			if ( $code >= 400 && $code < 600 ) {
 				$this->error->code    = $code;
-				$this->error->message = $this->getStatusMessage( $code );
+				$this->error->message = $this->get_status_message( $code );
 			}
 		}
 	}
@@ -127,14 +127,14 @@ class Response {
 	/**
 	 * @return bool
 	 */
-	public function hasError() {
+	public function has_error() {
 		return ( $this->error && $this->error->code );
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getErrorCode() {
+	public function get_error_code() {
 		return $this->error->code;
 	}
 
@@ -143,7 +143,7 @@ class Response {
 	 *
 	 * @return int
 	 */
-	public function setErrorCode( $code ) {
+	public function set_error_code( $code ) {
 		$this->error->code = $code;
 
 		return $this->error->code;
@@ -152,7 +152,7 @@ class Response {
 	/**
 	 * @return string
 	 */
-	public function getErrorMsg() {
+	public function get_error_msg() {
 		return $this->error->message;
 	}
 
@@ -161,7 +161,7 @@ class Response {
 	 *
 	 * @return string
 	 */
-	public function setErrorMsg( $msg ) {
+	public function set_error_msg( $msg ) {
 		$this->error->message = $msg;
 
 		return $this->error->message;
@@ -170,7 +170,7 @@ class Response {
 	/**
 	 * @return mixed
 	 */
-	public function getBody() {
+	public function get_body() {
 		return $this->body;
 	}
 
@@ -179,7 +179,7 @@ class Response {
 	 *
 	 * @return string
 	 */
-	public function setBody( $body ) {
+	public function set_body( $body ) {
 		$this->body = $body;
 
 		return $this->body;
@@ -190,7 +190,7 @@ class Response {
 	 *
 	 * @return array
 	 */
-	protected function setInfo( $info ) {
+	protected function set_info( $info ) {
 		$this->info = $info;
 
 		return $this->info;
@@ -201,7 +201,7 @@ class Response {
 	 *
 	 * @return array
 	 */
-	protected function setHeaders( $headers ) {
+	protected function set_headers( $headers ) {
 		$this->headers = explode( "\r\n", $headers );
 
 		return $this->headers;
@@ -212,7 +212,7 @@ class Response {
 	 *
 	 * @return mixed
 	 */
-	public function getInfo( $key = null ) {
+	public function get_info( $key = null ) {
 		if ( $key ) {
 			if ( isset( $this->info[ $key ] ) ) {
 				return $this->info[ $key ];
@@ -229,7 +229,7 @@ class Response {
 	 *
 	 * @return null|string
 	 */
-	public static function getStatusMessage( $status ) {
+	public static function get_status_message( $status ) {
 		if ( isset( static::$http_codes[ $status ] ) ) {
 			return static::$http_codes[ $status ];
 		}

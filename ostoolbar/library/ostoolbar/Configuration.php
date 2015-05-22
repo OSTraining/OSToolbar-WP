@@ -77,8 +77,8 @@ class Configuration {
 	}
 
 	public function section_out() {
-		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
-		if ( $response->hasError() ) {
+		$response = Request::make_request( array( 'resource' => 'checkapi' ) );
+		if ( $response->has_error() ) {
 			echo( '<iframe src="http://www.ostraining.com/services/adv/adv1.html" width="734px" height="80px"></iframe>' );
 
 		}
@@ -92,8 +92,8 @@ class Configuration {
 	}
 
 	public function toolbar_permission_field() {
-		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
-		if ( $response->hasError() ) {
+		$response = Request::make_request( array( 'resource' => 'checkapi' ) );
+		if ( $response->has_error() ) {
 			echo( __( 'Please enter an API key to use this feature.' ) );
 
 			return;
@@ -191,13 +191,13 @@ class Configuration {
 
 	public function video_field() {
 		$data     = array( 'resource' => 'articles' );
-		$response = Request::makeRequest( $data );
-		if ( $response->hasError() ) {
+		$response = Request::make_request( $data );
+		if ( $response->has_error() ) {
 			echo( __( 'Please enter an API key to use this feature.' ) );
 
 			return;
 		}
-		$list = $response->getBody();
+		$list = $response->get_body();
 
 		for ( $i = 0; $i < count( $list ); $i ++ ) {
 			$list[ $i ]->link = 'admin.php?page=ostoolbar&id=' . $list[ $i ]->id;
@@ -296,8 +296,8 @@ class Configuration {
 	}
 
 	public function toolbar_text_field() {
-		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
-		if ( $response->hasError() ) {
+		$response = Request::make_request( array( 'resource' => 'checkapi' ) );
+		if ( $response->has_error() ) {
 			echo( __( 'Please enter an API key to use this feature.' ) );
 
 			return;
