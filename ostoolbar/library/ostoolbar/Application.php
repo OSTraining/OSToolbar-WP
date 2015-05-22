@@ -47,10 +47,10 @@ class Application {
 
 	public function display() {
 		ob_start();
-		if ( ! $_GET['id'] ) {
-			Controller::action_tutorials( true );
-		} else {
+		if ( isset($_GET['id']) && $_GET['id']  ) {
 			Controller::action_tutorial( $_GET['id'] );
+		} else {
+			Controller::action_tutorials( true );
 		}
 		$content = ob_get_contents();
 		ob_end_clean();
