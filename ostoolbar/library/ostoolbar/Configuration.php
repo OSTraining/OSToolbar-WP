@@ -10,20 +10,19 @@ namespace Ostoolbar;
 defined( 'ABSPATH' ) or die();
 
 class Configuration {
-
 	const SETTINGS_PAGE = 'ostoolbar_settings';
 	const SETTINGS_SECTION = 'ostoolbar_settings_section';
 	const SETTINGS_GROUP = 'ostoolbar_settings_group';
 
 	public function init_settings() {
 		add_settings_section(
-			self::SETTINGS_SECTION,
+			static::SETTINGS_SECTION,
 			'Plugin Settings',
 			array(
 				$this,
 				'section_out'
 			),
-			self::SETTINGS_PAGE
+			static::SETTINGS_PAGE
 		);
 
 		add_settings_field(
@@ -33,10 +32,10 @@ class Configuration {
 				$this,
 				'api_key_field'
 			),
-			self::SETTINGS_PAGE, self::SETTINGS_SECTION
+			static::SETTINGS_PAGE, static::SETTINGS_SECTION
 		);
 
-		register_setting( self::SETTINGS_GROUP, 'api_key' );
+		register_setting( static::SETTINGS_GROUP, 'api_key' );
 
 		add_settings_field(
 			'videos',
@@ -45,8 +44,8 @@ class Configuration {
 				$this,
 				'video_field'
 			),
-			self::SETTINGS_PAGE,
-			self::SETTINGS_SECTION
+			static::SETTINGS_PAGE,
+			static::SETTINGS_SECTION
 		);
 
 		add_settings_field(
@@ -56,8 +55,8 @@ class Configuration {
 				$this,
 				'toolbar_text_field'
 			),
-			self::SETTINGS_PAGE,
-			self::SETTINGS_SECTION
+			static::SETTINGS_PAGE,
+			static::SETTINGS_SECTION
 		);
 
 		add_settings_field(
@@ -67,18 +66,18 @@ class Configuration {
 				$this,
 				'toolbar_permission_field'
 			),
-			self::SETTINGS_PAGE,
-			self::SETTINGS_SECTION
+			static::SETTINGS_PAGE,
+			static::SETTINGS_SECTION
 		);
 
-		register_setting( self::SETTINGS_GROUP, 'videos' );
-		register_setting( self::SETTINGS_GROUP, 'toolbar_text' );
-		register_setting( self::SETTINGS_GROUP, 'toolbar_icon' );
-		register_setting( self::SETTINGS_GROUP, 'toolbar_permission' );
+		register_setting( static::SETTINGS_GROUP, 'videos' );
+		register_setting( static::SETTINGS_GROUP, 'toolbar_text' );
+		register_setting( static::SETTINGS_GROUP, 'toolbar_icon' );
+		register_setting( static::SETTINGS_GROUP, 'toolbar_permission' );
 	}
 
 	public function section_out() {
-		$response = OST_RequestHelper::makeRequest( array( 'resource' => 'checkapi' ) );
+		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
 		if ( $response->hasError() ) {
 			echo( '<iframe src="http://www.ostraining.com/services/adv/adv1.html" width="734px" height="80px"></iframe>' );
 
@@ -87,21 +86,29 @@ class Configuration {
 	}
 
 	public function api_key_field() {
-		echo "<input type='text' size='55' name='api_key' value='" . get_option( 'api_key' ) . "' /> " . __( 'Enter your API Key from <a href="http://OSTraining.com">OSTraining.com</a>', 'ostoolbar' );
+		echo '<input type="text" size="55" name="api_key"'
+		     . ' value="' . get_option( 'api_key' ) . '" />'
+		     . __( 'Enter your API Key from <a href="http://OSTraining.com">OSTraining.com</a>', 'ostoolbar' );
 	}
 
 	public function toolbar_permission_field() {
-		$response = OST_RequestHelper::makeRequest( array( 'resource' => 'checkapi' ) );
+		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
 		if ( $response->hasError() ) {
-			echo( __( "Please enter an API key to use this feature." ) );
+			echo( __( 'Please enter an API key to use this feature.' ) );
 
 			return;
-
 		}
 
 		$text = get_option( 'toolbar_permission' );
 		if ( $text == "" ) {
-			$text = '{"editor":0,"contributor":0,"author":0,"subscriber":0}';
+			$text = json_encode(
+				array(
+					'editor'      => 0,
+					'contributor' => 0,
+					'author'      => 0,
+					'subscriber'  => 0
+				)
+			);
 		}
 		$permission = json_decode( $text, true );
 		?>
@@ -125,7 +132,7 @@ class Configuration {
 						else if (value === false) str += 'false'; //The booleans
 						else if (value === true) str += 'true';
 						else str += '"' + value + '"'; //All other things
-						// :TODO: Is there any more datatype we should be in the lookout for? (Functions?)
+						// @TODO: Is there any more datatype we should be in the lookout for? (Functions?)
 
 						parts.push(str);
 					}
@@ -184,22 +191,19 @@ class Configuration {
 
 	public function video_field() {
 		$data     = array( 'resource' => 'articles' );
-		$response = OST_RequestHelper::makeRequest( $data );
+		$response = Request::makeRequest( $data );
 		if ( $response->hasError() ) {
-			echo( __( "Please enter an API key to use this feature." ) );
+			echo( __( 'Please enter an API key to use this feature.' ) );
 
 			return;
 		}
 		$list = $response->getBody();
 
-		for ( $i = 0; $i < count( $list ); $i ++ ) :
+		for ( $i = 0; $i < count( $list ); $i ++ ) {
 			$list[ $i ]->link = 'admin.php?page=ostoolbar&id=' . $list[ $i ]->id;
-		endfor;
+		}
 
 		$videos = preg_split( "/,/", get_option( 'videos' ), - 1, PREG_SPLIT_NO_EMPTY );
-
-
-
 		?>
 		<script>
 			jQuery(function () {
@@ -225,7 +229,6 @@ class Configuration {
 				width: 295px;
 				float: left;
 				list-style: none;
-				padding: 0;
 				margin: 0;
 				padding: 3px;
 				border: 1px solid #dedede;
@@ -251,7 +254,9 @@ class Configuration {
 			<ul id="sortable1" class="connectedSortable">
 				<?php foreach ( $list as $item ): ?>
 					<?php
-					if ( ( ! $videos || ! is_array( $videos ) ) || ( count( $videos ) && in_array( $item->id, $videos ) ) ) {
+					if ( ( ! $videos || ! is_array( $videos ) )
+					     || ( count( $videos ) && in_array( $item->id, $videos ) )
+					) {
 						continue;
 					}
 					?>
@@ -291,19 +296,20 @@ class Configuration {
 	}
 
 	public function toolbar_text_field() {
-		$response = OST_RequestHelper::makeRequest( array( 'resource' => 'checkapi' ) );
+		$response = Request::makeRequest( array( 'resource' => 'checkapi' ) );
 		if ( $response->hasError() ) {
-			echo( __( "Please enter an API key to use this feature." ) );
+			echo( __( 'Please enter an API key to use this feature.' ) );
 
 			return;
 
 		}
-		echo "<input type='text' size='55' name='toolbar_text' value='" . get_option( 'toolbar_text' ) . "' /> " . __( 'The text seen in the toolbar link', 'ostoolbar' );
+		echo '<input type="text" size="55" name="toolbar_text"'
+		     . ' value="' . get_option( 'toolbar_text' ) . '" /> '
+		     . __( 'The text seen in the toolbar link', 'ostoolbar' );
 	}
 
 	public function toolbar_icon_field() {
-		$dir    = WP_PLUGIN_DIR . "/ostoolbar/assets/images";
-		$result = scandir( $dir );
+		$result = scandir( OSTOOLBAR_IMAGES );
 		?>
 		<select name='toolbar_icon'>-->
 			<?php foreach ( $result as $file ):
@@ -317,7 +323,7 @@ class Configuration {
 			<?php endforeach; ?>
 		</select>
 		<?php
-		echo __( 'The icon seen in the toolbar link. It is a file name in assets\images folder', 'ostoolbar' );
-		//echo "<input type='text' size='55' name='toolbar_icon' value='".get_option('toolbar_icon')."' /> ".__('The icon seen in the toolbar link. It is a file name in assets\images folder', 'ostoolbar');
+		$relative_path = str_replace(OSTOOLBAR_BASE, '', OSTOOLBAR_IMAGES);
+		echo __( "The icon seen in the toolbar link. It is a file in {$relative_path} folder", 'ostoolbar' );
 	}
 }

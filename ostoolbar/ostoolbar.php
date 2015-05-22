@@ -20,6 +20,7 @@ if (!defined('OSTOOLBAR_VERSION')) {
 	define('OSTOOLBAR_VERSION', '3.0');
 	define('OSTOOLBAR_BASE', __DIR__);
 	define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
+	define('OSTOOLBAR_IMAGES', OSTOOLBAR_BASE . '/assets/images');
 
 	require_once OSTOOLBAR_LIBRARY . '/ostoolbar/loader.php';
 	Ostoolbar\Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');

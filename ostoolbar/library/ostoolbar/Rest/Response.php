@@ -168,7 +168,7 @@ class Response {
 	}
 
 	/**
-	 * @return string
+	 * @return mixed
 	 */
 	public function getBody() {
 		return $this->body;
