@@ -20,7 +20,7 @@ class Tutorial extends Model
         $id = $this->getState('id');
 
         /** @var Tutorials $model */
-        $model = Factory::get_model('Tutorials');
+        $model = Factory::getModel('Tutorials');
 
         $tutorials = $model->getList();
         if (is_array($tutorials)) {

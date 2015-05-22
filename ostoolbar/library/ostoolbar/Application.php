@@ -36,7 +36,7 @@ class Application
             }
         }
 
-        $config = Factory::get_configuration();
+        $config = Factory::getConfiguration();
         add_action('admin_init', array($config, 'initSettings'));
         add_action('admin_menu', array($this, 'initAdminLinks'));
         add_action('admin_head', array($this, 'loadJs'));
@@ -50,10 +50,10 @@ class Application
     public function display()
     {
         ob_start();
-        if ($id = Factory::get_sanitize()->get_int('id')) {
-            Controller::action_tutorial($id);
+        if ($id = Factory::getSanitize()->getInt('id')) {
+            Controller::actionTutorial($id);
         } else {
-            Controller::action_tutorials(true);
+            Controller::actionTutorials(true);
         }
         $content = ob_get_contents();
         ob_end_clean();
@@ -102,7 +102,7 @@ class Application
 
     public function initAdminLinks()
     {
-        $controller = Factory::get_controller();
+        $controller = Factory::getController();
 
         $title = get_option('toolbar_text') == '' ? 'OSToolbar' : get_option('toolbar_text');
         $icon  = get_option('toolbar_icon') == '' ? 'ost_icon.png' : get_option('toolbar_icon');
@@ -118,7 +118,7 @@ class Application
             'ostoolbar',
             array(
                 $controller,
-                'action_tutorials'
+                'actionTutorials'
             ),
             ''
         );
@@ -130,7 +130,7 @@ class Application
             'options-ostoolbar',
             array(
                 $controller,
-                'action_configuration'
+                'actionConfiguration'
             )
         );
     }
@@ -138,7 +138,7 @@ class Application
     public function startListener()
     {
         /** @var Model\Help $model */
-        $model = Factory::get_model('Help');
+        $model = Factory::getModel('Help');
         $model->listen();
     }
 

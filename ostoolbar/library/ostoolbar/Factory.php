@@ -7,78 +7,84 @@
  */
 namespace Ostoolbar;
 
-defined( 'ABSPATH' ) or die();
+defined('ABSPATH') or die();
 
 /**
  * Class Factory
  *
  * @package Ostoolbar
  */
-abstract class Factory {
-	static $instances = array();
+abstract class Factory
+{
+    protected static $instances = array();
 
-	/**
-	 * Main application object
-	 *
-	 * @return Application
-	 */
-	public static function get_application() {
-		return static::get_instance( '\Ostoolbar\Application' );
-	}
+    /**
+     * Main application object
+     *
+     * @return Application
+     */
+    public static function getApplication()
+    {
+        return static::getInstance('\Ostoolbar\Application');
+    }
 
-	/**
-	 * @return Configuration
-	 */
-	public static function get_configuration() {
-		return static::get_instance('\Ostoolbar\Configuration');
-	}
+    /**
+     * @return Configuration
+     */
+    public static function getConfiguration()
+    {
+        return static::getInstance('\Ostoolbar\Configuration');
+    }
 
-	/**
-	 * @return Controller
-	 */
-	public static function get_controller() {
-		return static::get_instance('\Ostoolbar\Controller');
-	}
+    /**
+     * @return Controller
+     */
+    public static function getController()
+    {
+        return static::getInstance('\Ostoolbar\Controller');
+    }
 
-	/**
-	 * @return Sanitize
-	 */
-	public static function get_sanitize() {
-		return static::get_instance('\Ostoolbar\Sanitize');
-	}
+    /**
+     * @return Sanitize
+     */
+    public static function getSanitize()
+    {
+        return static::getInstance('\Ostoolbar\Sanitize');
+    }
 
-	/**
-	 * @param $name
-	 *
-	 * @return Model
-	 */
-	public static function get_model($name)
-	{
-		return static::get_instance('\Ostoolbar\Model\\' . $name);
-	}
+    /**
+     * @param $name
+     *
+     * @return Model
+     */
+    public static function getModel($name)
+    {
+        return static::getInstance('\Ostoolbar\Model\\' . $name);
+    }
 
-	/**
-	 * @return Cache\StorageFile
-	 */
-	public static function get_cache_storage()
-	{
-		return static::get_instance('\Ostoolbar\Cache\StorageFile');
-	}
+    /**
+     * @return Cache\StorageFile
+     */
+    public static function getCacheStorage()
+    {
+        return static::getInstance('\Ostoolbar\Cache\StorageFile');
+    }
 
-	/**
-	 * Generic factory method
-	 *
-	 * @param $class_name
-	 *
-	 * @return mixed
-	 */
-	protected static function get_instance( $class_name ) {
-		$key = md5( $class_name );
-		if ( ! isset( static::$instances[ $key ] ) ) {
-			static::$instances[ $key ] = new $class_name();
-		}
+    /**
+     * Generic factory method
+     *
+     * @param $class_name
+     *
+     * @return mixed
+     */
+    protected static function getInstance($class_name)
+    {
+        $key = md5($class_name);
+        if (!isset(static::$instances[$key])) {
+            static::$instances[$key] = new $class_name();
+        }
 
-		return static::$instances[ $key ];
-	}
+        return static::$instances[$key];
+    }
 
 }

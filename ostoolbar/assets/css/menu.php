@@ -10,7 +10,7 @@ use Ostoolbar\Sanitize;
 
 defined( 'ABSPATH' ) or die();
 
-$path = Factory::get_sanitize()->get_file_name('icon', Sanitize::HASH_REQUEST);
+$path = Factory::getSanitize()->getFileName('icon', Sanitize::HASH_REQUEST);
 
 header("Content-Type:text/css");
 ?>

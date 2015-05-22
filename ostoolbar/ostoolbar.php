@@ -14,16 +14,17 @@ Author URI: http://www.ostraining.com
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-defined( 'ABSPATH' ) or die();
+defined('ABSPATH') or die();
 
 if (!defined('OSTOOLBAR_VERSION')) {
-	define('OSTOOLBAR_VERSION', '3.0');
-	define('OSTOOLBAR_BASE', __DIR__);
-	define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
-	define('OSTOOLBAR_IMAGES', OSTOOLBAR_BASE . '/assets/images');
+    define('OSTOOLBAR_VERSION', '3.0');
+    define('OSTOOLBAR_BASE', __DIR__);
+    define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
+    define('OSTOOLBAR_ASSETS', OSTOOLBAR_BASE . '/assets');
+    define('OSTOOLBAR_IMAGES', OSTOOLBAR_ASSETS . '/images');
 
-	require_once OSTOOLBAR_LIBRARY . '/ostoolbar/loader.php';
-	Ostoolbar\Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
+    require_once OSTOOLBAR_LIBRARY . '/ostoolbar/loader.php';
+    Ostoolbar\Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
 }
 
-Ostoolbar\Factory::get_application()->init();
+Ostoolbar\Factory::getApplication()->init();
