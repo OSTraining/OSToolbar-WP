@@ -38,7 +38,7 @@ class Cache
         $response = Request::makeRequest(array('resource' => 'checkapi'));
         if ($response->hasError()) {
             static::$cacheGroup = static::$cacheGroup . '_trial';
-            Request::isTrial();
+            Request::$isTrial = true;
         }
 
         $callback = array($object, $method);
@@ -47,19 +47,19 @@ class Cache
         $data = $cache->get($cacheId, static::$cacheGroup);
 
         if ($data) {
-            $data     = unserialize($data);
+            $data     = json_decode($data);
             $response = Request::makeRequest(array('resource' => 'lastupdate'));
             if (!$response->hasError()) {
                 $lastUpdate = strtotime($response->getBody());
                 if (is_array($data)) {
-                    if ((count($data) && strtotime($data[0]->lastUpdateDate) < $lastUpdate)
+                    if ((count($data) && strtotime($data[0]->last_update_date) < $lastUpdate)
                         || count($data) == 0
                     ) {
                         $cache->remove($cacheId, static::$cacheGroup);
                         $data = call_user_func_array($callback, $args);
 
                         if ($data !== false) {
-                            $cached = trim(serialize($data));
+                            $cached = json_encode($data);
                             $cache->store($cacheId, static::$cacheGroup, $cached);
                         }
 
@@ -74,7 +74,7 @@ class Cache
             $data = call_user_func_array($callback, $args);
 
             if ($data !== false) {
-                $cached = trim(serialize($data));
+                $cached = json_encode($data);
                 $cache->store($cacheId, static::$cacheGroup, $cached);
             }
 

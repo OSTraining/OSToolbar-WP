@@ -35,7 +35,7 @@ class StorageFile
 
     public function __construct()
     {
-        $this->cachePath = dirname(dirname(__FILE__)) . '/cache';
+        $this->cachePath = __DIR__ . '/files';
         if (!is_dir($this->cachePath)) {
             @mkdir($this->cachePath, 0755);
         }
