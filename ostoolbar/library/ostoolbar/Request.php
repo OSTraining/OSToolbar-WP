@@ -10,12 +10,22 @@ namespace Ostoolbar;
 defined( 'ABSPATH' ) or die();
 
 abstract class Request {
-	public static $host_url = 'https://www.ostraining.com/index.php?option=com_api&v=wp';
+	public static $host_url = 'https://www.ostraining.com/';
 	public static $is_trial = false;
 
+	public static function get_host_url() {
+		$trial   = self::$is_trial ? '_trial' : '';
+
+		$vars = array(
+			'option' => 'com_api',
+			'v'      => 'wp' . $trial
+		);
+
+		return self::$host_url . 'index.php?' . http_build_query( $vars );
+	}
+
 	public static function is_trial() {
-		static::$host_url = "http://www.ostraining.com/index.php?option=com_api&v=wp_trial";
-		static::$is_trial  = true;
+		static::$is_trial = true;
 	}
 
 	public static function make_request( $data ) {
@@ -31,7 +41,7 @@ abstract class Request {
 		}
 		$data = array_merge( $data, $static_data );
 
-		$response = Rest\Request::send( static::$host_url, $data );
+		$response = Rest\Request::send( static::get_host_url(), $data );
 
 		if ( $body = $response->get_body() ) {
 			$response->set_body( json_decode( $body ) );
@@ -51,7 +61,7 @@ abstract class Request {
 	}
 
 	public static function filter( $text ) {
-		$split   = explode( 'index.php', static::$host_url );
+		$split   = explode( 'index.php', static::get_host_url() );
 		$ost_url = $split[0];
 
 		$text = preg_replace( '#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#', '$1="' . $ost_url . '$2$3', $text );
