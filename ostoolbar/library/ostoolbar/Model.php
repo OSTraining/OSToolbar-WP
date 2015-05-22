@@ -10,8 +10,8 @@ namespace Ostoolbar;
 defined( 'ABSPATH' ) or die();
 
 class Model {
-	private $state = array();
-	private $errors = array();
+	protected $state = array();
+	protected $errors = array();
 
 	public function setState( $key, $value ) {
 		$this->state[ $key ] = $value;
