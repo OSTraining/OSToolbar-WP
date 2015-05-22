@@ -11,13 +11,13 @@ defined( 'ABSPATH' ) or die();
 
 class Controller {
 	public static function action_tutorials( $isFrontend = false ) {
-		if ( $id = (int) $_GET['id'] ) {
+		if ( $id = Factory::getSanitize()->get_int('id') ) {
 			static::action_tutorial( $id );
 
 			return;
 		}
 
-		if ( $help = (int) $_GET['help'] ) {
+		if ( $help = Factory::getSanitize()->get_int('help') ) {
 			static::action_tutorial( $help, true );
 
 			return;
@@ -67,7 +67,7 @@ class Controller {
 					}
 					if ( $isFrontend ) {
 						$link = array(
-							'page_id' => $_GET["page_id"],
+							'page_id' => Factory::getSanitize()->get_key('page_id'),
 							'id'      => $tutorials[ $i ]->id
 						);
 					} else {

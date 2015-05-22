@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) or die();
 
 class Application {
 	public function init() {
+
 		add_shortcode( 'ostoolbar', array( '\Ostoolbar\Application', 'display' ) );
 
 		get_role( 'administrator' )->add_cap( 'see_videos' );
@@ -47,8 +48,8 @@ class Application {
 
 	public function display() {
 		ob_start();
-		if ( isset($_GET['id']) && $_GET['id']  ) {
-			Controller::action_tutorial( $_GET['id'] );
+		if ( $id = Factory::getSanitize()->get_int('id')  ) {
+			Controller::action_tutorial( $id );
 		} else {
 			Controller::action_tutorials( true );
 		}

@@ -9,6 +9,11 @@ namespace Ostoolbar;
 
 defined( 'ABSPATH' ) or die();
 
+/**
+ * Class Factory
+ *
+ * @package Ostoolbar
+ */
 abstract class Factory {
 	static $instances = array();
 
@@ -33,6 +38,13 @@ abstract class Factory {
 	 */
 	public static function getController() {
 		return static::getInstance('\Ostoolbar\Controller');
+	}
+
+	/**
+	 * @return Sanitize
+	 */
+	public static function getSanitize() {
+		return static::getInstance('\Ostoolbar\Sanitize');
 	}
 
 	/**
