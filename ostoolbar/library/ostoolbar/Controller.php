@@ -41,14 +41,8 @@ class Controller
             if (Request::$isTrial) {
                 if ($apikey) {
                     echo '<div class="error">'
-                        . 'Your API key is invalid. Please enter an API key in the'
+                        . 'Your API key is invalid. Please enter an API key in'
                         . ' <a href="options-general.php?page=options-ostoolbar">OSToolbar settings</a>.'
-                        . '</div>';
-                } else {
-                    echo '<div class="error">'
-                        . 'You are using OSToolbar Free.'
-                        . ' Visit <a href="http://OSToolbar.com">OSToolbar.com</a>'
-                        . ' to get the Pro version with more videos, more features and to remove all advertising.'
                         . '</div>';
                 }
             }
