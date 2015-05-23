@@ -41,9 +41,6 @@ class Application
         add_action('admin_menu', array($this, 'initAdminLinks'));
         add_action('admin_head', array($this, 'loadJs'));
 
-        if (isset($_GET['page']) && $_GET['page'] == 'ostoolbar') {
-            add_action('admin_notices', array($this, 'apikeyCheck'));
-        }
         add_action('init', array($this, 'addEditorButton'));
     }
 
@@ -90,14 +87,6 @@ class Application
         }
 
         return $b;
-    }
-
-    public function apikeyCheck()
-    {
-        $api_key = get_option('api_key');
-        if (!$api_key) {
-            // @TODO: Determine what to do here
-        }
     }
 
     public function initAdminLinks()
