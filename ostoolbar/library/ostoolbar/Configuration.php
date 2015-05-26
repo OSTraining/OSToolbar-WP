@@ -22,9 +22,7 @@ class Configuration
     {
         $app = Factory::getApplication();
 
-        // Register scripts
-        wp_register_style('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/css/configuration.css'));
-        wp_register_script('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/js/configuration.js'));
+        add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
 
         // Section heading and description
         add_settings_section(
@@ -75,6 +73,30 @@ class Configuration
             static::SETTINGS_SECTION
         );
         register_setting(static::SETTINGS_GROUP, 'toolbar_permission');
+    }
+
+    public function enqueueScripts($hook)
+    {
+        if ($hook = 'settings_page_options-ostoolbar') {
+            $app = Factory::getApplication();
+
+            wp_register_style(
+                'ostoolbar-jquery-ui',
+                $app->getUrl(OSTOOLBAR_ASSETS . '/css/ui-lightness/jquery-ui.css')
+            );
+            wp_enqueue_style('ostoolbar-jquery-ui');
+
+            wp_register_style('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/css/configuration.css'));
+            wp_enqueue_style('ostoolbar-configuration');
+
+            wp_register_script('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/js/configuration.js'));
+            wp_enqueue_script('ostoolbar-configuration');
+
+            wp_register_script('ostoolbar-jquery-ui', $app->getUrl(OSTOOLBAR_ASSETS . '/js/jquery-ui.js'));
+            wp_enqueue_script('ostoolbar-jquery-ui');
+        }
+
+
     }
 
     /**
@@ -245,9 +267,6 @@ class Configuration
             return;
         }
         $list = $response->getBody();
-
-        wp_enqueue_style('ostoolbar-configuration');
-        wp_enqueue_script('ostoolbar-configuration');
 
         for ($i = 0; $i < count($list); $i++) {
             $list[$i]->link = 'admin.php?page=ostoolbar&id=' . $list[$i]->id;

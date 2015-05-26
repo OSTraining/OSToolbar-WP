@@ -137,15 +137,6 @@ class Controller
 
     public function actionConfiguration()
     {
-        $app = Factory::getApplication();
-
-        wp_deregister_script('jquery-ui-js');
-        wp_register_script('jquery-ui-js', $app->getUrl(OSTOOLBAR_ASSETS . '/js/jquery-ui.js'));
-        wp_enqueue_script('jquery-ui-js');
-
-        wp_deregister_style('jquery-ui-css');
-        wp_register_style('jquery-ui-css', $app->getUrl(OSTOOLBAR_ASSETS . '/css/ui-lightness/jquery-ui.css'));
-        wp_enqueue_style('jquery-ui-css');
         ?>
         <div class="wrap">
             <h2>OSToolbar Configuration</h2>
