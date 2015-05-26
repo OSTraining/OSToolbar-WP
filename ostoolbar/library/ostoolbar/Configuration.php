@@ -15,8 +15,18 @@ class Configuration
     const SETTINGS_SECTION = 'ostoolbar_settings_section';
     const SETTINGS_GROUP   = 'ostoolbar_settings_group';
 
+    /**
+     * Setup the configuration page
+     */
     public function initSettings()
     {
+        $app = Factory::getApplication();
+
+        // Register scripts
+        wp_register_style('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/css/configuration.css'));
+        wp_register_script('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/js/configuration.js'));
+
+        // Section heading and description
         add_settings_section(
             static::SETTINGS_SECTION,
             'Plugin Settings',
@@ -27,6 +37,7 @@ class Configuration
             static::SETTINGS_PAGE
         );
 
+        // API Key field
         add_settings_field(
             'api_key',
             __('API Key', 'ostoolbar'),
@@ -37,9 +48,9 @@ class Configuration
             static::SETTINGS_PAGE,
             static::SETTINGS_SECTION
         );
-
         register_setting(static::SETTINGS_GROUP, 'api_key');
 
+        // Video selection and ordering
         add_settings_field(
             'videos',
             __('Choose and rearrange videos', 'ostoolbar'),
@@ -50,18 +61,9 @@ class Configuration
             static::SETTINGS_PAGE,
             static::SETTINGS_SECTION
         );
+        register_setting(static::SETTINGS_GROUP, 'videos');
 
-        add_settings_field(
-            'toolbar_text',
-            __('OSToolbar menu text', 'ostoolbar'),
-            array(
-                $this,
-                'toolbarTextField'
-            ),
-            static::SETTINGS_PAGE,
-            static::SETTINGS_SECTION
-        );
-
+        // Toolbar permissions
         add_settings_field(
             'toolbar_permission',
             __('Choose which users can see videos', 'ostoolbar'),
@@ -72,33 +74,42 @@ class Configuration
             static::SETTINGS_PAGE,
             static::SETTINGS_SECTION
         );
-
-        register_setting(static::SETTINGS_GROUP, 'videos');
-        register_setting(static::SETTINGS_GROUP, 'toolbar_text');
-        register_setting(static::SETTINGS_GROUP, 'toolbar_icon');
         register_setting(static::SETTINGS_GROUP, 'toolbar_permission');
     }
 
+    /**
+     * Display configuration section title and description
+     */
     public function sectionOut()
     {
         $response = Request::makeRequest(array('resource' => 'checkapi'));
         if ($response->hasError()) {
-            echo '<iframe src="http://www.ostraining.com/services/adv/adv1.html" width="734px" height="80px"></iframe>';
-
+            // @TODO: What to do here?
         }
         echo '<p>' . __('Configure the OSToolbar plugin') . '</p>';
     }
 
+    /**
+     * Display API Key field
+     */
     public function apikeyField()
     {
-        echo '<input type="text" size="55" name="api_key"'
-            . ' value="' . get_option('api_key') . '" />'
-            . __(
+        $apiKey = get_option('api_key');
+
+        $text = '<input type="text" size="55" name="api_key"'
+            . ' value="' . $apiKey . '" />';
+        if ($apiKey == '') {
+            $text .= __(
                 'Enter your API Key from <a href="http://OSTraining.com" target="_blank">OSTraining.com</a>',
                 'ostoolbar'
             );
+        }
+        echo $text;
     }
 
+    /**
+     * Toolbar Permissions
+     */
     public function toolbarPermissionField()
     {
         $response = Request::makeRequest(array('resource' => 'checkapi'));
@@ -108,18 +119,17 @@ class Configuration
             return;
         }
 
-        $text = get_option('toolbar_permission');
-        if ($text == "") {
-            $text = json_encode(
-                array(
-                    'editor'      => 0,
-                    'contributor' => 0,
-                    'author'      => 0,
-                    'subscriber'  => 0
-                )
+        $permission = get_option('toolbar_permission');
+        if ($permission == '') {
+            $permission = array(
+                'editor'      => 0,
+                'contributor' => 0,
+                'author'      => 0,
+                'subscriber'  => 0
             );
+        } else {
+            $permission = json_decode($permission, true);
         }
-        $permission = json_decode($text, true);
         ?>
         <script>
             function array2json(arr) {
@@ -141,7 +151,7 @@ class Configuration
                         else if (value === false) str += 'false'; //The booleans
                         else if (value === true) str += 'true';
                         else str += '"' + value + '"'; //All other things
-                        // @TODO: Is there any more datatype we should be in the lookout for? (Functions?)
+                        // @TODO: Is there any more datatype we should be on the lookout for? (Functions?)
 
                         parts.push(str);
                     }
@@ -218,10 +228,13 @@ class Configuration
             type="hidden"
             name="toolbar_permission"
             id="toolbar_permission"
-            value='<?php echo $text; ?>'/>
+            value='<?php echo json_encode($permission); ?>'/>
     <?php
     }
 
+    /**
+     * Video selection/ordering field
+     */
     public function videoField()
     {
         $data     = array('resource' => 'articles');
@@ -233,58 +246,19 @@ class Configuration
         }
         $list = $response->getBody();
 
+        wp_enqueue_style('ostoolbar-configuration');
+        wp_enqueue_script('ostoolbar-configuration');
+
         for ($i = 0; $i < count($list); $i++) {
             $list[$i]->link = 'admin.php?page=ostoolbar&id=' . $list[$i]->id;
         }
 
         $videos = preg_split("/,/", get_option('videos'), -1, PREG_SPLIT_NO_EMPTY);
         ?>
-        <script>
-            jQuery(function() {
-                jQuery('#sortable1, #sortable2').sortable({
-                    connectWith: '.connectedSortable'
-                }).disableSelection();
-
-                function updateSortableField() {
-                    var selected = jQuery('#sortable2').sortable('toArray');
-                    var string = selected.join(',');
-                    jQuery('#videos').val(string);
-                }
-
-                jQuery('#sortable2').bind('sortupdate', function(event, ui) {
-                    updateSortableField();
-                });
-
-                updateSortableField();
-            });
-        </script>
-        <style>
-            #sortable1, #sortable2 {
-                width: 295px;
-                float: left;
-                list-style: none;
-                margin: 0;
-                padding: 3px;
-                border: 1px solid #dedede;
-                height: 300px;
-                overflow-y: scroll;
-            }
-
-            #sortable1 {
-                margin-right: 15px;
-            }
-
-            #sortable1 li, #sortable2 li {
-                padding: 5px;
-                margin-top: 1px;
-                cursor: pointer;
-            }
-
-            .clearfix {
-                clear: both;
-            }
-        </style>
-        <div class='sortable_holder'>
+        <div class='sortable-holder'>
+            <div class="sortable-header">Videos not shown to users</div>
+            <div class="sortable-header">Videos shown to users</div>
+            <div style="clear:both"></div>
             <ul id="sortable1" class="connectedSortable">
                 <?php
                 foreach ($list as $item) :
@@ -299,7 +273,7 @@ class Configuration
                 endforeach;
                 ?>
             </ul>
-            <div style="float:left; width:50px; margin-right:20px;">
+            <div class="sortable-divider">
                 <?php echo(__("Drag and drop the videos to choose which ones will show to users")); ?>
             </div>
             <?php
@@ -337,42 +311,5 @@ class Configuration
             id="videos"
             value='<?php echo get_option('videos'); ?>'/>
     <?php
-    }
-
-    public function toolbarTextField()
-    {
-        $response = Request::makeRequest(array('resource' => 'checkapi'));
-        if ($response->hasError()) {
-            echo(__('Please enter an API key to use this feature.'));
-
-            return;
-
-        }
-        echo '<input type="text" size="55" name="toolbar_text"'
-            . ' value="' . get_option('toolbar_text') . '" /> '
-            . __('The text seen in the toolbar link', 'ostoolbar');
-    }
-
-    public function toolbarIconField()
-    {
-        $result = scandir(OSTOOLBAR_IMAGES);
-        ?>
-        <select name='toolbar_icon'>
-            <?php
-            foreach ($result as $file) :
-                $ext    = split('\.', $file);
-                $mayext = strtolower($ext[count($ext) - 1]);
-                if (!in_array($mayext, array('jpg', 'gif', 'png'))) {
-                    continue;
-                }
-                ?>
-                <option value="<?php echo($file);?>"><?php echo($file);?></option>
-            <?php
-            endforeach;
-            ?>
-        </select>
-        <?php
-        $relativePath = str_replace(OSTOOLBAR_BASE, '', OSTOOLBAR_IMAGES);
-        echo __("The icon seen in the toolbar link. It is a file in {$relativePath} folder", 'ostoolbar');
     }
 }

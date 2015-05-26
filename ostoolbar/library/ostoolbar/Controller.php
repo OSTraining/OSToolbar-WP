@@ -137,20 +137,22 @@ class Controller
 
     public function actionConfiguration()
     {
-        wp_deregister_script('jquery_ui');
-        wp_register_script('jquery_ui', plugins_url('assets/js/jquery-ui.js', __FILE__));
-        wp_enqueue_script('jquery_ui');
+        $app = Factory::getApplication();
 
-        wp_deregister_style('jquery_ui_css');
-        wp_register_style('jquery_ui_css', plugins_url('assets/css/ui-lightness/jquery-ui.css', __FILE__));
-        wp_enqueue_style('jquery_ui_css');
+        wp_deregister_script('jquery-ui-js');
+        wp_register_script('jquery-ui-js', $app->getUrl(OSTOOLBAR_ASSETS . '/js/jquery-ui.js'));
+        wp_enqueue_script('jquery-ui-js');
+
+        wp_deregister_style('jquery-ui-css');
+        wp_register_style('jquery-ui-css', $app->getUrl(OSTOOLBAR_ASSETS . '/css/ui-lightness/jquery-ui.css'));
+        wp_enqueue_style('jquery-ui-css');
         ?>
         <div class="wrap">
             <h2>OSToolbar Configuration</h2>
 
             <form method="post" action="options.php">
                 <?php settings_fields(Configuration::SETTINGS_GROUP); ?>
-                <?PHP do_settings_sections(Configuration::SETTINGS_PAGE); ?>
+                <?php do_settings_sections(Configuration::SETTINGS_PAGE); ?>
                 <p class="submit">
                     <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>"/>
                 </p>
