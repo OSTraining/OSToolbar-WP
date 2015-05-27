@@ -43,7 +43,7 @@
 }
 
 #toplevel_page_ostoolbar .dashicons-admin-generic::before {
-    background-image: url(../images/icon-48-tutorials-menu.png);
+    background-image: url(../images/ost_icon.png);
     background-repeat: no-repeat;
     background-position: 0 7px;
     background-size: 100% auto;
