@@ -217,7 +217,7 @@ class Configuration
             size='55'
             name='ostoolbar_videos'
             id="ostoolbar_videos"
-            value='<?php echo get_option('ostoolbars_videos'); ?>'/>
+            value='<?php echo get_option('ostoolbar_videos'); ?>'/>
     <?php
     }
 }

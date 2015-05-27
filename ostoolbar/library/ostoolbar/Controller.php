@@ -111,19 +111,6 @@ class Controller
     <?php
     }
 
-    public function actionHelp()
-    {
-        /** @var Model\HelpPage $model */
-        $model = Factory::getModel('HelpPage');
-        $help  = $model->getData();
-        ?>
-        <div class="wrap">
-            <h2><?php echo $help->title; ?></h2>
-            <?php echo $help->introtext; ?>
-        </div>
-    <?php
-    }
-
     public function actionConfiguration()
     {
         ?>

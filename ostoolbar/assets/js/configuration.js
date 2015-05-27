@@ -4,7 +4,7 @@
             connectWith: '.connectedSortable'
         }).disableSelection();
 
-        var videos = $('#videos');
+        var videos = $('#ostoolbar_videos');
 
         if (videos[0]) {
             var updateSortableField = function() {
