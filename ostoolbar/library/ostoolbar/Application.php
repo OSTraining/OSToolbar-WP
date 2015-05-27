@@ -112,7 +112,7 @@ class Application
         add_object_page(
             'OSToolbar',
             'OSToolbar',
-            'toolbar_see_videos',
+            'ostoolbar_see_videos',
             'ostoolbar',
             array(
                 $controller,
