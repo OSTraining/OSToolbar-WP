@@ -23,7 +23,7 @@ if (!defined('OSTOOLBAR_VERSION')) {
     define('OSTOOLBAR_ASSETS', OSTOOLBAR_BASE . '/assets');
     define('OSTOOLBAR_IMAGES', OSTOOLBAR_ASSETS . '/images');
 
-    require_once OSTOOLBAR_LIBRARY . '/ostoolbar/loader.php';
+    require_once OSTOOLBAR_LIBRARY . '/ostoolbar/Loader.php';
     Ostoolbar\Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
 }
 
