@@ -35,5 +35,10 @@
     clear: both;
 }
 
-
-
+#toplevel_page_ostoolbar .dashicons-admin-generic::before {
+    background-image: url(../images/icon-48-tutorials.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% auto;
+    content: " ";
+}
