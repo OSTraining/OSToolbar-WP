@@ -2,7 +2,8 @@
 Contributors: alledia
 Tags: video, tutorials, help, support, documentation
 Requires at least: 4.0
-Tested up to: 4.3-alpha-32280-src
+Tested up to: 4.3
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -49,18 +50,23 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 * Added front-end viewing of the videos via a button in the editor
 * Jumped version numbers from 1.0 to 2.2 in order to match our current version, not the one set by WordPress.org
 
-== 2.3.0 ==
+= 2.3.0 =
 * Fix bug to list video work with new API.
 
-== 2.4.0 ==
+= 2.4.0 =
 * Fix ordering of videos.
 
-== 2.5.0 ==
+= 2.5.0 =
 * Upgrade JQuery UI to fix arranging video.
 
-== 3.0.0 ==
+= 3.0.0 =
 * Upgrade/refactoring for compatibility with WP 4.x
 
-== 3.0.1 ==
-* Remove more obsolete code
+= 3.0.1 =
+* Remove obsolete code
 * Update icons
+
+== Upgrade Notice ==
+
+= 3.0.0 =
+Previous versions did not work in latest WordPress anymore

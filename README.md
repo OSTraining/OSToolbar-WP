@@ -1,6 +1,17 @@
-# OSToolbar for WordPress
+# Plugin Name
+Contributors: alledia
+Tags: video, tutorials, help, support, documentation
+Requires at least: 4.0
+Tested up to: 4.3
+Stable tag: trunk
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 OSToolbar is a plugin that shows training videos inside your WordPress admin panel.
+
+## Description
+
+OSToolbar shows training videos inside your WordPress admin panel.
 
 [OSTraining.com](http://ostraining.com/ "OSTraining WordPress Training") produces hundreds of training videos every year. We wanted to make it easier for WordPress users to see those videos without coming to our site each time.
 
@@ -52,5 +63,10 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 * Upgrade/refactoring for compatibility with WP 4.x
 
 ### 3.0.1
-* Remove more obsolete code
-* Update icon
+* Remove obsolete code
+* Update icons
+
+## Upgrade Notice
+
+### 3.0.0
+Previous versions did not work in latest WordPress anymore
