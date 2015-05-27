@@ -19,12 +19,6 @@ class Controller
             return;
         }
 
-        if ($help = Factory::getSanitize()->getInt('help')) {
-            static::actionTutorial($help, true);
-
-            return;
-        }
-
         /** @var Model\Tutorials $model */
         $model     = Factory::getModel('Tutorials');
         $tutorials = $model->getList();
@@ -84,19 +78,12 @@ class Controller
     <?php
     }
 
-    public static function actionTutorial($id, $help_article = false)
+    public static function actionTutorial($id)
     {
-        if ($help_article) {
-            /** @var Model\Help $model */
-            $model = Factory::getModel('Help');
-            $model->setState('id', $id);
-            $tutorial = $model->getData();
-        } else {
-            /** @var Model\Tutorial $model */
-            $model = Factory::getModel('Tutorial');
-            $model->setState('id', $id);
-            $tutorial = $model->getData();
-        }
+        /** @var Model\Tutorial $model */
+        $model = Factory::getModel('Tutorial');
+        $model->setState('id', $id);
+        $tutorial = $model->getData();
         ?>
         <div class="wrap">
             <h2>
