@@ -63,4 +63,4 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 
 == 3.0.1 ==
 * Remove more obsolete code
-* Update icon
+* Update icons
