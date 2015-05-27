@@ -35,14 +35,16 @@
     clear: both;
 }
 
-#toplevel_page_ostoolbare {
-    transition: opacity .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out;
-    -webkit-transition: opacity .25s ease-in-out;
-    -o-transition: opacity .25s ease-in-out;
+#toplevel_page_ostoolbare,
+#toplevel_page_ostoolbar .dashicons-admin-generic::before {
+    transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
 }
 
-#toplevel_page_ostoolbar .dashicons-admin-generic::before {
+#toplevel_page_ostoolbar .dashicons-admin-generic::before,
+#toplevel_page_ostoolbar .current .dashicons-admin-generic::before {
     background-image: url(../images/ost_icon.png);
     background-repeat: no-repeat;
     background-position: 0 7px;
@@ -50,6 +52,6 @@
     content: " ";
 }
 
-#toplevel_page_ostoolbar:hover .dashicons-admin-generic::before {
+#toplevel_page_ostoolbar:hover .wp-not-current-submenu .dashicons-admin-generic::before {
     background-position: 0 -33px;
 }
