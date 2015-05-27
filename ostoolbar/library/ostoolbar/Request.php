@@ -28,7 +28,7 @@ abstract class Request
 
     public static function makeRequest($data)
     {
-        $apikey = get_option('api_key');
+        $apikey = get_option('ostoolbar_apikey');
 
         $staticData = array(
             'format' => 'json',

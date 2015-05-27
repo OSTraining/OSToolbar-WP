@@ -29,7 +29,7 @@ class Controller
         $model     = Factory::getModel('Tutorials');
         $tutorials = $model->getList();
 
-        $videos = preg_split('/,/', get_option('videos'), -1, PREG_SPLIT_NO_EMPTY);
+        $videos = preg_split('/,/', get_option('ostoolbar_videos'), -1, PREG_SPLIT_NO_EMPTY);
         ?>
         <div class="wrap">
             <h2>
@@ -37,7 +37,7 @@ class Controller
                     src="<?php echo plugins_url('/ostoolbar/assets/images/icon-48-tutorials.png'); ?>"
                     align="absmiddle"/> Tutorials</h2>
             <?php
-            $apikey = get_option('api_key');
+            $apikey = get_option('ostoolbar_apikey');
             if (Request::$isTrial) {
                 if ($apikey) {
                     echo '<div class="error">'
