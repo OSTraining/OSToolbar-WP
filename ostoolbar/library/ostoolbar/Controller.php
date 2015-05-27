@@ -35,7 +35,9 @@ class Controller
             <h2>
                 <img
                     src="<?php echo plugins_url('/ostoolbar/assets/images/icon-48-tutorials.png'); ?>"
-                    align="absmiddle"/> Tutorials</h2>
+                    align="absmiddle"/>
+                Tutorials
+            </h2>
             <?php
             $apikey = get_option('ostoolbar_apikey');
             if (Request::$isTrial) {
@@ -97,18 +99,13 @@ class Controller
         }
         ?>
         <div class="wrap">
-            <?php
-            if (in_array($tutorial->jversion, array("wp_trial"))) :
-                ?>
-                <iframe
-                    src="http://www.ostraining.com/services/adv/adv1.html" width="734px" height="80px"
-                    style="overflow:visible">
-                </iframe>
-            <?php
-            endif;
-            ?>
+            <h2>
+                <img
+                    src="<?php echo plugins_url('/ostoolbar/assets/images/icon-48-tutorials.png'); ?>"
+                    align="absmiddle"/>
+                <?php echo $tutorial->title ?>
+            </h2>
 
-            <h2><?php echo $tutorial->title ?></h2>
             <?php echo $tutorial->introtext . $tutorial->fulltext; ?>
         </div>
     <?php
