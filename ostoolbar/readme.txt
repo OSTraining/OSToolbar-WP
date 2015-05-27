@@ -1,8 +1,8 @@
 === Plugin Name ===
 Contributors: alledia
 Tags: video, tutorials, help, support, documentation
-Requires at least: 3.0
-Tested up to: 3.5.1
+Requires at least: 4.0
+Tested up to: 4.3-alpha-32280-src
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,13 +22,10 @@ There is also a Pro version available. Features include:
 2. Choose which videos to show
 3. Choose what order the videos appear in
 4. Choose which users can see the videos
-5. Show the videos on the fronted of your site
-6. Whitelabel the plugin. Add your company name and logo.
-
 
 == Installation ==
 
-1. Istall OSToolbar either via the WordPress.org plugin directory, or by uploading the files to your server
+1. Install OSToolbar either via the WordPress.org plugin directory, or by uploading the files to your server
 2. Click the Activate button.
 3. Visit the OSToolbar link in your WordPress admin menu and start watching videos.
 
@@ -37,13 +34,6 @@ There is also a Pro version available. Features include:
 = Can I Watch These Videos On All My Sites? =
 
 Yes, the plugin is released under the GPL license and you can install it on as many sites as wish.
-
-= How Do I Show These Videos on the Front of My Site? =
-
-1. Go to a post or page.
-2. There will be an OSToolbar button in the editor. Click that button.
-3. The button will insert this code into your content [ostoolbar]
-4. Save and you're done!
 
 == Screenshots ==
 
@@ -67,3 +57,6 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 
 == 2.5 ==
 * Upgrade JQuery UI to fix arranging video.
+
+== 3.0 ==
+* Upgrade/refactoring for compatibility with WP 4.x
