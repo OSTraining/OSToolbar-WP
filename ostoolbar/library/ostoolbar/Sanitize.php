@@ -11,26 +11,6 @@ defined('ABSPATH') or die();
 
 class Sanitize
 {
-    const HASH_DEFAULT = '$_GET';
-    const HASH_GET     = '$_GET';
-    const HASH_METHOD  = 'REQUEST_METHOD';
-    const HASH_POST    = '$_POST';
-    const HASH_REQUEST = '$_REQUEST';
-    const HASH_SERVER  = '$_SERVER';
-
-    public function getHash($hash = self::HASH_DEFAULT)
-    {
-        if ($hash == static::HASH_METHOD) {
-            $hash = '$_' . $_SERVER[$hash];
-        }
-
-        if (isset($$hash) && is_array($$hash)) {
-            return $$hash;
-        }
-
-        return array();
-    }
-
     /**
      * @param string   $key
      * @param string   $hash
@@ -38,13 +18,15 @@ class Sanitize
      *
      * @return mixed|null
      */
-    public function get($key, $hash = self::HASH_DEFAULT, $function = null)
+    public function get($key, $function = null, $hash = null)
     {
-        $source = $this->getHash($hash);
+        if ($hash === null) {
+            $hash = $_GET;
+        }
 
         $value = null;
-        if (isset($source[$key])) {
-            $value = $source[$key];
+        if (is_array($hash) && isset($hash[$key])) {
+            $value = $hash[$key];
 
             if (is_string($function) && function_exists($function)) {
                 $value = $function($value);
@@ -57,72 +39,72 @@ class Sanitize
         return $value;
     }
 
-    public function getEmail($key, $hash = self::HASH_DEFAULT)
+    public function getEmail($key, $hash = null)
     {
         return $this->get($key, 'sanitize_email', $hash);
     }
 
-    public function getFileName($key, $hash = self::HASH_DEFAULT)
+    public function getFileName($key, $hash = null)
     {
         return $this->get($key, 'sanitize_file_name', $hash);
     }
 
-    public function getHtmlClass($key, $hash = self::HASH_DEFAULT)
+    public function getHtmlClass($key, $hash = null)
     {
         return $this->get($key, 'sanitize_html_class', $hash);
     }
 
-    public function getInt($key, $hash = self::HASH_DEFAULT)
+    public function getInt($key, $hash = null)
     {
-        return $this->get($key, 'intval', $hash = null);
+        return $this->get($key, 'intval', $hash);
     }
 
-    public function getKey($key, $hash = self::HASH_DEFAULT)
+    public function getKey($key, $hash = null)
     {
         return $this->get($key, 'sanitize_key', $hash);
     }
 
-    public function getMeta($key, $hash = self::HASH_DEFAULT)
+    public function getMeta($key, $hash = null)
     {
         return $this->get($key, 'sanitize_meta', $hash);
     }
 
-    public function getMimeType($key, $hash = self::HASH_DEFAULT)
+    public function getMimeType($key, $hash = null)
     {
         return $this->get($key, 'sanitize_mime_type', $hash);
     }
 
-    public function getOption($key, $hash = self::HASH_DEFAULT)
+    public function getOption($key, $hash = null)
     {
         return $this->get($key, 'sanitize_option', $hash);
     }
 
-    public function getSqlOrderby($key, $hash = self::HASH_DEFAULT)
+    public function getSqlOrderby($key, $hash = null)
     {
         return $this->get($key, 'sanitize_sql_orderby', $hash);
     }
 
-    public function getTextField($key, $hash = self::HASH_DEFAULT)
+    public function getTextField($key, $hash = null)
     {
         return $this->get($key, 'sanitize_text_field', $hash);
     }
 
-    public function getTitle($key, $hash = self::HASH_DEFAULT)
+    public function getTitle($key, $hash = null)
     {
         return $this->get($key, 'sanitize_title', $hash);
     }
 
-    public function getTitleForQuery($key, $hash = self::HASH_DEFAULT)
+    public function getTitleForQuery($key, $hash = null)
     {
         return $this->get($key, 'sanitize_title_for_query', $hash);
     }
 
-    public function getTitleWithDashes($key, $hash = self::HASH_DEFAULT)
+    public function getTitleWithDashes($key, $hash = null)
     {
         return $this->get($key, 'sanitize_title_with_dashes', $hash);
     }
 
-    public function getUser($key, $hash = self::HASH_DEFAULT)
+    public function getUser($key, $hash = null)
     {
         return $this->get($key, 'sanitize_user', $hash);
     }

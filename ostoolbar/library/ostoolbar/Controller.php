@@ -56,33 +56,25 @@ class Controller
                 </thead>
                 <tbody>
                 <?php
-                for ($i = 0; $i < count($tutorials); $i++) :
-                    if (is_array($videos)
-                        && count($videos)
-                        && !in_array($tutorials[$i]->id, $videos)
-                    ) {
-                        continue;
-                    }
-                    if ($isFrontend) {
-                        $link = array(
-                            'page_id' => Factory::getSanitize()->getKey('page_id'),
-                            'id'      => $tutorials[$i]->id
-                        );
-                    } else {
-                        $link = array(
-                            'page_id' => $tutorials[$i]->link
-                        );
-                    }
+                foreach ($tutorials as $i => $tutorial) :
+                    if (!is_array($videos) || !count($videos) || in_array($tutorial->id, $videos)) :
+                        if ($isFrontend) {
+                            $pageId = Factory::getSanitize()->getKey('page_id');
+                            $link = "index.php?page_id={$pageId}&id={$tutorial->id}";
+                        } else {
+                            $link = "admin.php?page=ostoolbar&id={$tutorial->id}";
+                        }
                     ?>
                     <tr>
                         <td>
-                            <a href="<?php echo 'index.php?' . http_build_query($link); ?>">
-                                <?php echo $tutorials[$i]->title; ?></a>
+                            <a href="<?php echo $link; ?>">
+                                <?php echo $tutorial->title; ?></a>
                         </td>
-                        <td><?php echo $tutorials[$i]->ostcat_name; ?></td>
+                        <td><?php echo $tutorial->ostcat_name; ?></td>
                     </tr>
                 <?php
-                endfor;
+                    endif;
+                endforeach;
                 ?>
                 </tbody>
             </table>
