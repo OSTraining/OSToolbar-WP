@@ -25,7 +25,7 @@ class Tutorials extends Model
 
     public function getList()
     {
-        $data = Cache::callback($this, 'fetchList', array(), null, true);
+        $data = Cache::callback($this, 'fetchList', array(), null);
 
         $videos = preg_split("/,/", get_option('ostoolbar_videos'), -1, PREG_SPLIT_NO_EMPTY);
         if (count($videos)) {
