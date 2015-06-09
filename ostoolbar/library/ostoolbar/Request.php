@@ -12,11 +12,11 @@ defined('ABSPATH') or die();
 abstract class Request
 {
     protected static $hostUrl = 'https://www.ostraining.com/';
-    public static    $isTrial = false;
+    protected static $trial = null;
 
     public static function getHostUrl()
     {
-        $trial = static::$isTrial ? '_trial' : '';
+        $trial = static::$trial ? '_trial' : '';
 
         $vars = array(
             'option' => 'com_api',
@@ -24,6 +24,15 @@ abstract class Request
         );
 
         return static::$hostUrl . 'index.php?' . http_build_query($vars);
+    }
+
+    public static function isTrial()
+    {
+        if (static::$trial === null) {
+            $response = Request::makeRequest(array('resource' => 'checkapi'));
+            static::$trial = $response->hasError();
+        }
+        return static::$trial;
     }
 
     public static function makeRequest($data)

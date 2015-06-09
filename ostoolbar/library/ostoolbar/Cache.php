@@ -11,7 +11,7 @@ defined('ABSPATH') or die();
 
 class Cache
 {
-    public static $cacheGroup = 'ostoolbar';
+    public static $cacheGroup = null;
 
     const DAY      = 86400;
     const HALF_DAY = 43200;
@@ -35,10 +35,9 @@ class Cache
         }
         $cache->setLifetime($cacheLifetime);
 
-        $response = Request::makeRequest(array('resource' => 'checkapi'));
-        if ($response->hasError()) {
-            static::$cacheGroup = static::$cacheGroup . '_trial';
-            Request::$isTrial = true;
+        static::$cacheGroup = 'ostoolbar';
+        if (Request::isTrial()) {
+             static::$cacheGroup .= '_trial';
         }
 
         $callback = array($object, $method);
