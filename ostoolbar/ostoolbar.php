@@ -16,8 +16,8 @@ Author URI: http://www.ostraining.com
 
 defined('ABSPATH') or die();
 
-if (!defined('OSTOOLBAR_VERSION')) {
-    define('OSTOOLBAR_VERSION', '3.0.1');
+if (!defined('OSTOOLBAR_LOADED')) {
+    define('OSTOOLBAR_LOADED', true);
     define('OSTOOLBAR_BASE', __DIR__);
     define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
     define('OSTOOLBAR_ASSETS', OSTOOLBAR_BASE . '/assets');
