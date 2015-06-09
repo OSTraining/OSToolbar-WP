@@ -22,6 +22,7 @@ class Controller
         /** @var Model\Tutorials $model */
         $model     = Factory::getModel('Tutorials');
         $tutorials = $model->getList();
+        $app       = Factory::getApplication();
 
         $videos = preg_split('/,/', get_option('ostoolbar_videos'), -1, PREG_SPLIT_NO_EMPTY);
         ?>
@@ -32,17 +33,7 @@ class Controller
                     align="absmiddle"/>
                 Tutorials
             </h2>
-            <?php
-            $apikey = get_option('ostoolbar_apikey');
-            if (Request::$isTrial) {
-                if ($apikey) {
-                    echo '<div class="error">'
-                        . 'Your API key is invalid. Please enter an API key in'
-                        . ' <a href="options-general.php?page=ostoolbar_options">OSToolbar settings</a>.'
-                        . '</div>';
-                }
-            }
-            ?>
+            <?php echo $app->getTrialBanner(); ?>
             <table class="widefat">
                 <thead>
                 <tr>
@@ -56,19 +47,19 @@ class Controller
                     if (!is_array($videos) || !count($videos) || in_array($tutorial->id, $videos)) :
                         if ($isFrontend) {
                             $pageId = Factory::getSanitize()->getKey('page_id');
-                            $link = "index.php?page_id={$pageId}&id={$tutorial->id}";
+                            $link   = "index.php?page_id={$pageId}&id={$tutorial->id}";
                         } else {
                             $link = "admin.php?page=ostoolbar&id={$tutorial->id}";
                         }
-                    ?>
-                    <tr>
-                        <td>
-                            <a href="<?php echo $link; ?>">
-                                <?php echo $tutorial->title; ?></a>
-                        </td>
-                        <td><?php echo $tutorial->ostcat_name; ?></td>
-                    </tr>
-                <?php
+                        ?>
+                        <tr>
+                            <td>
+                                <a href="<?php echo $link; ?>">
+                                    <?php echo $tutorial->title; ?></a>
+                            </td>
+                            <td><?php echo $tutorial->ostcat_name; ?></td>
+                        </tr>
+                    <?php
                     endif;
                 endforeach;
                 ?>
@@ -80,6 +71,8 @@ class Controller
 
     public static function actionTutorial($id)
     {
+        $app = Factory::getApplication();
+
         /** @var Model\Tutorial $model */
         $model = Factory::getModel('Tutorial');
         $model->setState('id', $id);
@@ -93,7 +86,10 @@ class Controller
                 <?php echo $tutorial->title ?>
             </h2>
 
-            <?php echo $tutorial->introtext . $tutorial->fulltext; ?>
+            <?php
+            echo $tutorial->introtext . $tutorial->fulltext;
+            echo $app->getTrialBanner();
+            ?>
         </div>
     <?php
     }

@@ -110,4 +110,40 @@ class Application
             wp_enqueue_script('ostoolbar-configuration');
         }
     }
+
+    public function getTrialBanner()
+    {
+        $apikey = get_option('ostoolbar_apikey');
+        $html   = array();
+        if (Request::isTrial()) {
+            if ($apikey) {
+                $html = array(
+                    '<div class="error">',
+                    'Your API key is invalid. Please enter an API key in',
+                    ' <a href="options-general.php?page=ostoolbar_options">OSToolbar settings</a>.',
+                    '</div>'
+                );
+
+            } else {
+                $linkAttribs = array(
+                    'href="https://www.ostraining.com/pricing/"',
+                    'target="_blank"',
+                    'class="btn btn-primary"'
+                );
+                $text        = sprintf(
+                    '%s <a %s>%s</a>',
+                    'Want more advanced videos?',
+                    join(' ', $linkAttribs),
+                    'Go Pro!'
+                );
+
+                $html = array(
+                    '<div class="alert alert-info text-center">',
+                    '<h4>' . $text . '</h4>',
+                    '</div>'
+                );
+            }
+        }
+        return join("\n", $html);
+    }
 }
