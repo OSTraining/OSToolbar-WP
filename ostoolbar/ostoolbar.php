@@ -14,17 +14,22 @@ Author URI: http://www.ostraining.com
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use OctopusFrame\Registry\ArrayRegistry;
+use OctopusFrame\Factory;
+use OSTeammate\Platform\WordPress\Client;
+use OSTeammate\Services;
+
 defined('ABSPATH') or die();
 
-if (!defined('OSTOOLBAR_LOADED')) {
-    define('OSTOOLBAR_LOADED', true);
-    define('OSTOOLBAR_BASE', __DIR__);
-    define('OSTOOLBAR_LIBRARY', OSTOOLBAR_BASE . '/library');
-    define('OSTOOLBAR_ASSETS', OSTOOLBAR_BASE . '/assets');
-    define('OSTOOLBAR_IMAGES', OSTOOLBAR_ASSETS . '/images');
+require_once __DIR__ . '/library/osteammate/src/include.php';
 
-    require_once OSTOOLBAR_LIBRARY . '/ostoolbar/Loader.php';
-    Ostoolbar\Loader::register('Ostoolbar', OSTOOLBAR_LIBRARY . '/ostoolbar');
-}
-
-Ostoolbar\Factory::getApplication()->init();
+$options = new ArrayRegistry(
+    array(
+        'platform'  => 'WordPress',
+        'cachePath' => realpath(__DIR__ . '/cache'),
+        'logPath'   => realpath(__DIR__ . '/log'),
+        'services'  => new Services
+    )
+);
+$container = Factory::getContainer($options);
+$container->client->init();

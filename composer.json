@@ -1,6 +1,6 @@
 {
   "name"              : "Alledia/OstoolbarWP",
-  "description"       : "Show OS Training videos inside your WordPress admin panel",
+  "description"       : "Show OS Training videos inside your WordPress admin panel or in frontend using shortcodes.",
   "minimum-stability" : "stable",
   "license"           : "GPL-2+",
   "authors"           : [
