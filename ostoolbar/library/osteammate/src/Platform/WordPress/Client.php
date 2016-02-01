@@ -43,11 +43,17 @@ class Client extends AbstractClient
     {
         $container = Factory::getContainer();
 
-        if (!$container->api->isConnected()) {
-            return '<div class="error">Error connecting to OSTeammate API. Please, verify the API token.</div>';
+        // Check the user capabilities
+        if ($container->user->can('see_ostoolbar_videos')) {
+            if (!$container->api->isConnected()) {
+                return '<div class="error">Error connecting to OSTeammate API. Please, verify the API token.</div>';
+            }
+
+            return $container->client->getView()->getOutput();
         }
 
-        return $container->client->getView()->getOutput();
+        // If the user can't see the videos, return just an empty string
+        return '';
     }
 
     public function isDebug()
@@ -83,9 +89,9 @@ class Client extends AbstractClient
 
         foreach ($permissions as $key => $allowed) {
             if ($allowed) {
-                get_role($key)->add_cap('ostoolbar_see_videos');
+                get_role($key)->add_cap('see_ostoolbar_videos');
             } else {
-                get_role($key)->remove_cap('ostoolbar_see_videos');
+                get_role($key)->remove_cap('see_ostoolbar_videos');
             }
         }
     }
