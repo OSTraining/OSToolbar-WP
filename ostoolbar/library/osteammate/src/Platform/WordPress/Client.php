@@ -28,6 +28,7 @@ class Client extends AbstractClient
         }
 
         add_shortcode('osteammate', array($this, 'replaceShortCode'));
+        add_shortcode('ostoolbar', array($this, 'replaceShortCode'));
 
         if ($this->isAdmin()) {
             $admin = new Admin;
