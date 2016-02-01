@@ -71,5 +71,5 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 * Minor code clean-up
 * Fix a link to settings page
 
-### 3.0.3
+### 4.0.0
 * Fix a problem with urls to videos
