@@ -21,7 +21,7 @@ use OSTeammate\Services;
 
 defined('ABSPATH') or die();
 
-require_once __DIR__ . '/library/osteammate/src/include.php';
+require_once __DIR__ . '/include.php';
 
 $options = new ArrayRegistry(
     array(

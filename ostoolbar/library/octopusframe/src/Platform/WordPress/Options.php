@@ -50,9 +50,7 @@ class Options implements RegistrableInterface
      */
     public function get($key, $default = null)
     {
-        $value = get_option($this->optionPrefix . $key);
-
-        return false !== $value ? $value : $default;
+        return get_option($this->optionPrefix . $key, $default);
     }
 
     /**
@@ -82,8 +80,8 @@ class Options implements RegistrableInterface
      */
     public function exists($key)
     {
-        $value = get_option($this->optionPrefix . $key);
+        $value = get_option($this->optionPrefix . $key, null);
 
-        return false !== $value;
+        return !is_null($value);
     }
 }

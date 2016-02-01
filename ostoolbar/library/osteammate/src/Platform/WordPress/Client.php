@@ -11,6 +11,7 @@ namespace OSTeammate\Platform\WordPress;
 use OctopusFrame\Factory;
 use OSTeammate\Application\AbstractClient;
 use Whoops\Handler\PrettyPageHandler;
+use WP_Roles;
 
 defined('OSTEAMMATE_LOADED') or die();
 
@@ -29,6 +30,8 @@ class Client extends AbstractClient
 
         add_shortcode('osteammate', array($this, 'replaceShortCode'));
         add_shortcode('ostoolbar', array($this, 'replaceShortCode'));
+
+        $this->setCapabilities();
 
         if ($this->isAdmin()) {
             $admin = new Admin;
@@ -55,6 +58,36 @@ class Client extends AbstractClient
     public function isAdmin()
     {
         return is_admin();
+    }
+
+    protected function setCapabilities()
+    {
+        $config = Factory::getContainer()->configuration;
+        $permissions = $config->get('permissions');
+
+        if ($permissions) {
+            $permissions = json_decode($permissions, true);
+        } else {
+            global $wp_roles;
+
+            if (!$wp_roles) {
+                $wp_roles = new WP_Roles;
+            }
+
+            $permissions = $wp_roles->role_names;
+
+            foreach ($permissions as $key => $value) {
+                $permissions[$key] = (int)($key == 'administrator');
+            }
+        }
+
+        foreach ($permissions as $key => $allowed) {
+            if ($allowed) {
+                get_role($key)->add_cap('ostoolbar_see_videos');
+            } else {
+                get_role($key)->remove_cap('ostoolbar_see_videos');
+            }
+        }
     }
 
     /**

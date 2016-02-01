@@ -1,37 +1,44 @@
-(function($) {
-    $(document).ready(function() {
-        $('#sortable1, #sortable2').sortable({
-            connectWith: '.connectedSortable'
-        }).disableSelection();
+(function(Ractive, $) {
+    $(function() {
+        Ractive.DEBUG = false;
 
-        var videos = $('#ostoolbar_videos');
+        var currentPermissions = JSON.parse($('#current-permissions').val());
 
-        if (videos[0]) {
-            var updateSortableField = function() {
-                var selected = $('#sortable2').sortable('toArray');
-                var string = selected.join(',');
-                videos.val(string);
-            };
+        var ractive = new Ractive({
+            el: '#ostoolbar-settings-panel',
+            template: '#ostoolbar-settings-template',
+            data: {
+                'permissions': currentPermissions,
+                'json': ''
+            },
+            oninit: function() {
+                this.updateJSONValue();
+            },
+            updateJSONValue: function() {
+                var permissions = this.get('permissions');
+                var jsonValue = {};
 
-            $('#sortable2').bind('sortupdate', function(event, ui) {
-                updateSortableField();
-            });
-
-            updateSortableField();
-        }
-
-        var toolbar_permissions = $('#ostoolbar_permissions');
-        var role_permissions = $('.role_permission');
-        if (toolbar_permissions[0] && role_permissions[0]) {
-            role_permissions.on('click', function(evt) {
-                var text = {};
-                role_permissions.each(function(idx, el) {
-                    text[el.name] = el.checked ? 1 : 0;
+                $.each(permissions, function(index, perm) {
+                    jsonValue[index] = perm.allowed ? 1 : 0;
                 });
-                console.log(toolbar_permissions.val());
-                toolbar_permissions.val(JSON.stringify(text));
-            });
-            $(role_permissions[0]).fire('click');
-        }
+
+                this.set('json', JSON.stringify(jsonValue));
+            },
+            updatePermissions: function() {
+                var permissions = this.get('permissions');
+
+                $.each($('#ostoolbar-settings-panel .role_permission'), function(index, ch) {
+                    permissions[$(ch).data('name')].allowed = $(ch).is(':checked');
+                });
+
+                this.set('permissions', permissions);
+
+                this.updateJSONValue();
+            }
+        });
+
+        ractive.on('updatePermissions', function(e) {
+            this.updatePermissions();
+        });
     });
-})(jQuery);
+})(Ractive, jQuery);
