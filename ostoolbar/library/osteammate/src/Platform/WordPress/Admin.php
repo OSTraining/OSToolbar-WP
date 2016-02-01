@@ -110,8 +110,7 @@ class Admin
         }
 
         if (isset($input['permissions'])) {
-            $newInput['permissions'] = $input['permissions'];
-            // $newInput['permissions'] = preg_replace('/[^a-z0-9",\-_:]/i', '', $input['permissions']);
+            $newInput['permissions'] = preg_replace('/[^a-z0-9",\-_:\{\}]/i', '', $input['permissions']);
         }
 
         return $newInput;
