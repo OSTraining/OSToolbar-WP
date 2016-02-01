@@ -19,4 +19,15 @@ class User implements UserInterface
     {
         return get_current_user_id();
     }
+
+    /**
+     * Returns true if the user has the specificied capability.
+     *
+     * @param  string $capability The capability
+     * @return bool               True if capable
+     */
+    public function can($capability)
+    {
+        return current_user_can($capability);
+    }
 }
