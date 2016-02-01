@@ -44,7 +44,7 @@ class Client extends AbstractClient
         $container = Factory::getContainer();
 
         // Check the user capabilities
-        if ($container->user->can('see_ostoolbar_videos')) {
+        if ($container->access->hasAccess('see_ostoolbar_videos')) {
             if (!$container->api->isConnected()) {
                 return '<div class="error">Error connecting to OSTeammate API. Please, verify the API token.</div>';
             }

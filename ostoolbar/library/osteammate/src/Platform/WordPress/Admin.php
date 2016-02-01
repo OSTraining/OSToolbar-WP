@@ -41,6 +41,18 @@ class Admin
             static::SETTINGS_PAGE,
             array($this, 'createSettingsPage')
         );
+
+        // Add page to the main menu
+        add_object_page(
+            'OSToolbar',
+            'OSToolbar',
+            'see_ostoolbar_videos',
+            'ostoolbar',
+            array(
+                $this,
+                'createObjectPage'
+            )
+        );
     }
 
     /**
@@ -59,6 +71,20 @@ class Admin
 
         echo '</form>';
         echo '</div>';
+    }
+
+    public function createObjectPage()
+    {
+        $container = Factory::getContainer();
+
+        // Check the user capabilities
+        if ($container->access->hasAccess('see_ostoolbar_videos')) {
+            if (!$container->api->isConnected()) {
+                echo '<div class="error">Error connecting to OSTeammate API. Please, verify the API token.</div>';
+            }
+
+            echo $container->client->getView()->getOutput();
+        }
     }
 
     /**
