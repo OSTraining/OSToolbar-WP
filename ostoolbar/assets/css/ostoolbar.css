@@ -1,0 +1,10 @@
+#ostoolbar_wp_wrapper {
+    padding: 10px 20px;
+    background: #fff;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+#ost-banner img {
+    width: 100%;
+}

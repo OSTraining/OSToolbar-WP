@@ -79,11 +79,15 @@ class Admin
 
         // Check the user capabilities
         if ($container->access->hasAccess('see_ostoolbar_videos')) {
+            echo '<div id="ostoolbar_wp_wrapper">';
+
             if (!$container->api->isConnected()) {
                 echo '<div class="error">Error connecting to OSTeammate API. Please, verify the API token.</div>';
             }
 
             echo $container->client->getView()->getOutput();
+
+            echo '</div>';
         }
     }
 
@@ -243,6 +247,13 @@ class Admin
                 )
             );
             wp_enqueue_script('ostoolbar-configuration');
+        } elseif ($hook === 'toplevel_page_ostoolbar') {
+            // Add configuration scripts/css
+            wp_register_style(
+                'ostoolbar-style',
+                $this->getUrl(OSTOOLBAR_ASSETS . '/css/ostoolbar.css')
+            );
+            wp_enqueue_style('ostoolbar-style');
         }
     }
 
