@@ -95,18 +95,18 @@ class Application
             // Add jQuery-ui support
             wp_register_style(
                 'ostoolbar-jquery-ui',
-                $app->getUrl(OSTOOLBAR_ASSETS . '/css/ui-lightness/jquery-ui.css')
+                $app->getUrl(OSTOOLBAR_ASSETS_PATH . '/css/ui-lightness/jquery-ui.css')
             );
             wp_enqueue_style('ostoolbar-jquery-ui');
 
-            wp_register_script('ostoolbar-jquery-ui', $app->getUrl(OSTOOLBAR_ASSETS . '/js/jquery-ui.js'));
+            wp_register_script('ostoolbar-jquery-ui', $app->getUrl(OSTOOLBAR_ASSETS_PATH . '/js/jquery-ui.js'));
             wp_enqueue_script('ostoolbar-jquery-ui');
 
             // Add configuration scripts/css
-            wp_register_style('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/css/configuration.css'));
+            wp_register_style('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS_PATH . '/css/configuration.css'));
             wp_enqueue_style('ostoolbar-configuration');
 
-            wp_register_script('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS . '/js/configuration.js'));
+            wp_register_script('ostoolbar-configuration', $app->getUrl(OSTOOLBAR_ASSETS_PATH . '/js/configuration.js'));
             wp_enqueue_script('ostoolbar-configuration');
         }
     }

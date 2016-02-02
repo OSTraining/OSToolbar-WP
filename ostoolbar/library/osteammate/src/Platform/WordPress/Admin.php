@@ -234,13 +234,13 @@ class Admin
             // Add configuration scripts/css
             wp_register_style(
                 'ostoolbar-configuration',
-                $this->getUrl(OSTOOLBAR_ASSETS . '/css/configuration.css')
+                $this->getUrl(OSTOOLBAR_ASSETS_PATH . '/css/configuration.css')
             );
             wp_enqueue_style('ostoolbar-configuration');
 
             wp_register_script(
                 'ostoolbar-configuration',
-                $this->getUrl(OSTOOLBAR_ASSETS . '/js/configuration.js'),
+                $this->getUrl(OSTOOLBAR_ASSETS_PATH . '/js/configuration.js'),
                 array(
                     'ostoolbar-ractive',
                     'jquery-core'
@@ -251,7 +251,7 @@ class Admin
             // Add configuration scripts/css
             wp_register_style(
                 'ostoolbar-style',
-                $this->getUrl(OSTOOLBAR_ASSETS . '/css/ostoolbar.css')
+                $this->getUrl(OSTOOLBAR_ASSETS_PATH . '/css/ostoolbar.css')
             );
             wp_enqueue_style('ostoolbar-style');
         }
