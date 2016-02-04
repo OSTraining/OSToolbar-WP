@@ -15,6 +15,8 @@ use WP_Roles;
 
 defined('OSTEAMMATE_LOADED') or die();
 
+require_once ABSPATH . "/wp-admin/includes/plugin.php";
+
 
 class Client extends AbstractClient
 {
@@ -105,6 +107,9 @@ class Client extends AbstractClient
     {
         if (empty($this->version)) {
             $this->version = '0.0.0';
+
+            $data = \get_plugin_data(ABSPATH . '/wp-content/plugins/ostoolbar/ostoolbar.php', false, false);
+            $this->version = $data['Version'];
         }
 
         return parent::getVersion();
