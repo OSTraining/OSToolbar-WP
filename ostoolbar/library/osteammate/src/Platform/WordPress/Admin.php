@@ -166,7 +166,7 @@ class Admin
      */
     public function printFeedbackForm()
     {
-        $user      = wp_get_current_user();
+        $user      = wp_get_current_user(); // @todo: Create a platform-specific user class
         $container = Factory::getContainer();
 
         echo '<button id="ostoolbar-feedback-btn">Provide Feedback</button>';
