@@ -166,7 +166,8 @@ class Admin
      */
     public function printFeedbackForm()
     {
-        $user = wp_get_current_user();
+        $user      = wp_get_current_user();
+        $container = Factory::getContainer();
 
         echo '<button id="ostoolbar-feedback-btn">Provide Feedback</button>';
         echo '<script type="text/javascript" src="https://ostraining.atlassian.net/s/f25af8f2d88b3e09d0426cd659a2d113-T/en_US-fd2bae/71001/30d688cae3a5e0b7b42a9da7fdb0e0bd/2.0.10/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=2dc2d5de"></script>
@@ -183,6 +184,12 @@ class Admin
                           components: "10302",
                           fullname: "' . $user->display_name . '",
                           email: "' . $user->user_email . '"
+                      },
+                      environment : {
+                          "Domain": "' . $container->client->getDomain() . '",
+                          "OSTeammate API Token": "' . $container->configuration->get('token') . '",
+                          "Platform / Version": "' . $container->platform . ' / ' . get_bloginfo('version') . '",
+                          "Package Version": "' . $container->client->getVersion() . '"
                       }
                   };
               </script>';
