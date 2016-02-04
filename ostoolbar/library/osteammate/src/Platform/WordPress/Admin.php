@@ -125,6 +125,13 @@ class Admin
             static::SETTINGS_PAGE,
             static::SETTINGS_SECTION
         );
+
+        add_settings_section(
+            static::SETTINGS_SECTION . '_feedback',
+            __('Feedback', 'ostoolbar'),
+            array($this, 'printFeedbackForm'),
+            static::SETTINGS_PAGE
+        );
     }
 
     /**
@@ -152,6 +159,33 @@ class Admin
     public function printSectionInfo()
     {
         echo 'Enter your settings below:';
+    }
+
+    /**
+     * Print the Feedback Section text
+     */
+    public function printFeedbackForm()
+    {
+        $user = wp_get_current_user();
+
+        echo '<button id="ostoolbar-feedback-btn">Provide Feedback</button>';
+        echo '<script type="text/javascript" src="https://ostraining.atlassian.net/s/f25af8f2d88b3e09d0426cd659a2d113-T/en_US-fd2bae/71001/30d688cae3a5e0b7b42a9da7fdb0e0bd/2.0.10/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=2dc2d5de"></script>
+              <script type="text/javascript">
+                  window.ATL_JQ_PAGE_PROPS =  {
+                      "triggerFunction": function(showCollectorDialog) {
+                          //Requires that jQuery is available!
+                          jQuery("#ostoolbar-feedback-btn").click(function(e) {
+                              e.preventDefault();
+                              showCollectorDialog();
+                          });
+                      },
+                      fieldValues: {
+                          components: "10302",
+                          fullname: "' . $user->display_name . '",
+                          email: "' . $user->user_email . '"
+                      }
+                  };
+              </script>';
     }
 
     /**
