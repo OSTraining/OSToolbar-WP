@@ -10,7 +10,7 @@ Author URI: http://www.ostraining.com
 /**
  * @package    OSToolbar-WP
  * @contact    www.alledia.com, support@alledia.com
- * @copyright  2015 Alledia.com, All rights reserved
+ * @copyright  2016 Alledia.com, All rights reserved
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
