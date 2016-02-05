@@ -42,6 +42,13 @@ class Client implements ClientAPIInterface
     protected $token = null;
 
     /**
+     * The affiliate link
+     *
+     * @var string
+     */
+    protected $affiliateLink = 'https://www.ostraining.com/pricing/';
+
+    /**
      * API target URL
      *
      * @todo      Convert this in a setting with default values
@@ -103,6 +110,11 @@ class Client implements ClientAPIInterface
             }
 
             if (is_object($body) && $body->error == 0) {
+                // Set the affiliate link
+                if (isset($body->data->affiliate_link) && !empty(trim($body->data->affiliate_link))) {
+                    $this->affiliateLink = trim($body->data->affiliate_link);
+                }
+
                 return $body->data;
             } else {
                 throw new Exception("API error: {$body->message}");
@@ -229,6 +241,16 @@ class Client implements ClientAPIInterface
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Returns the affiliate link returned by the API
+     *
+     * @return string The URL
+     */
+    public function getAffiliateLink()
+    {
+        return $this->affiliateLink;
     }
 
     /**

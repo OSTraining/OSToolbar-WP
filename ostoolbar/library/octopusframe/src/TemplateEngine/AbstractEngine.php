@@ -90,7 +90,8 @@ abstract class AbstractEngine implements RenderableInterface
             'theme'          => $this->theme,
             'script_url'     => $_SERVER['SCRIPT_NAME'],
             'request_uri'    => $_SERVER['REQUEST_URI'],
-            'api_url'        => $container->api->getUrl()
+            'api_url'        => $container->api->getUrl(),
+            'affiliate_link' => $container->api->getAffiliateLink(),
         );
     }
 
