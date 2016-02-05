@@ -82,7 +82,7 @@ class Admin
             echo '<div id="ostoolbar_wp_wrapper">';
 
             if (!$container->api->isConnected()) {
-                echo '<div class="error">Error connecting to OSTeammate API. Please, verify the API token.</div>';
+                echo '<div class="error">Error connecting to OSToolbar API. Please, verify the API token or use the default one: <strong>' . OSTOOLBAR_DEFAULT_TOKEN . '</strong>.</div>';
             }
 
             echo $container->client->getView()->getOutput();
@@ -200,12 +200,51 @@ class Admin
      */
     public function tokenField()
     {
-        $config = Factory::getContainer()->configuration;
+        $container = Factory::getContainer();
+        $config = $container->configuration;
+        ?>
+        <div id="ostoolbar-token-panel"></div>
+        <script id="ostoolbar-token-template" type="text/ractive">
+            <input
+                type="text"
+                id="token"
+                name="<?php echo static::OPTION_NAME; ?>[token]"
+                value="{{token}}"
+                style="width: 300px;" />
 
-        printf(
-            '<input type="text" id="token" name="' . static::OPTION_NAME . '[token]" value="%s" style="width: 300px;" />',
-            esc_attr($config->get('token'))
-        );
+            {{#showDefaultTokenWarning}}
+                <div class="ostoolbar-inline-suggestion">
+                    <a href="javascript:void(0);" on-click="applyDefaultToken">Click here</a> to revert it to the default one and have access to the free content.
+                </div>
+            {{/showDefaultTokenWarning}}
+
+            {{#usingDefaultToken}}
+                <div class="ostoolbar-inline-suggestion">
+
+                    Using the default token you have access to all free content provided by <a href="https://www.ostraining.com">OSTraining</a>.<br>
+
+                    In case you are interested in any of the following features:
+                    <ul>
+                        <li>Affiliate Program</li>
+                        <li>More advanced or custom Videos</li>
+                        <li>Custom Layout</li>
+                    </ul>
+
+                    <a href="mailto:contact@ostraining.com">Contact us</a> to receive a personal token and more information.
+                </div>
+            {{/usingDefaultToken}}
+
+            {{#edited}}
+                <div class="ostoolbar-inline-warning">
+                    <p>Cool! After click Save Changes we will verify the new API Token!</p>
+                </div>
+            {{/edited}}
+        </script>
+
+        <input type="hidden" id="ostoolbar-token" value="<?php echo $config->get('token'); ?>" />
+        <input type="hidden" id="ostoolbar-default-token" value="<?php echo OSTOOLBAR_DEFAULT_TOKEN; ?>" />
+        <input type="hidden" id="ostoolbar-connected" value="<?php echo $container->api->isConnected() ? '1' : '0'; ?>" />
+        <?php
     }
 
     /**
@@ -216,8 +255,8 @@ class Admin
         $config = Factory::getContainer()->configuration;
         $permissions = $config->getPermissions();
         ?>
-        <div id="ostoolbar-settings-panel"></div>
-        <script id='ostoolbar-settings-template' type='text/ractive'>
+        <div id="ostoolbar-permissions-panel"></div>
+        <script id='ostoolbar-permissions-template' type='text/ractive'>
             <table border="0" cellpadding="0" cellspacing="0">
                 {{#each permissions}}
                     <tr>
@@ -243,8 +282,7 @@ class Admin
         </script>
         <input
             type="hidden"
-            name="current-permissions"
-            id="current-permissions"
+            id="ostoolbar-current-permissions"
             value="<?php echo esc_attr(json_encode($permissions)); ?>" />
         <?php
     }
@@ -258,7 +296,12 @@ class Admin
     {
         $container = Factory::getContainer();
         if (!$container->api->isConnected()) {
-            echo '<div class="error"><p>Error connecting to OSToolbar API. Please, <a href="options-general.php?page=ostoolbar_settings">verify the API token</a>.</p></div>';
+
+            if (get_current_screen()->base !== 'settings_page_ostoolbar_settings') {
+                echo '<div class="error"><p>Error connecting to OSToolbar API. Please, <a href="options-general.php?page=ostoolbar_settings">verify the API token</a>.</p></div>';
+            } else {
+                echo '<div class="error"><p>Error connecting to OSTeammate API. Please, verify the API token.</p></div>';
+            }
         }
     }
 

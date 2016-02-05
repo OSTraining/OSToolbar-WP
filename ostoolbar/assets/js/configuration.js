@@ -2,13 +2,49 @@
     $(function() {
         Ractive.DEBUG = false;
 
-        var currentPermissions = JSON.parse($('#current-permissions').val());
-
-        var ractive = new Ractive({
-            el: '#ostoolbar-settings-panel',
-            template: '#ostoolbar-settings-template',
+        /**
+         * Token
+         *
+         * @type       {Ractive}
+         */
+        var token = new Ractive({
+            el: '#ostoolbar-token-panel',
+            template: '#ostoolbar-token-template',
             data: {
-                'permissions': currentPermissions,
+                'token': $('#ostoolbar-token').val(),
+                'defaultToken': $('#ostoolbar-default-token').val(),
+                'connected': $('#ostoolbar-connected').val(),
+                'showDefaultTokenWarning': $('#ostoolbar-connected').val() == 0,
+                'usingDefaultToken': $('#ostoolbar-token').val() === $('#ostoolbar-default-token').val(),
+                'edited': false
+            },
+            applyDefaultToken: function() {
+                this.set('token', this.get('defaultToken'));
+            }
+        });
+
+        token.on('applyDefaultToken', function() {
+            this.applyDefaultToken();
+        });
+
+        token.observe('token', function (newValue) {
+            this.set('usingDefaultToken', this.get('defaultToken') === newValue);
+            this.set('showDefaultTokenWarning',
+                (this.get('connected', 0) == 0 && !this.get('usingDefaultToken', false)) || newValue.trim() == ''
+            );
+            this.set('edited', newValue != $('#ostoolbar-token').val());
+        });
+
+        /**
+         * Permissions
+         *
+         * @type       {Ractive}
+         */
+        var permissions = new Ractive({
+            el: '#ostoolbar-permissions-panel',
+            template: '#ostoolbar-permissions-template',
+            data: {
+                'permissions': JSON.parse($('#ostoolbar-current-permissions').val()),
                 'json': ''
             },
             oninit: function() {
@@ -27,7 +63,7 @@
             updatePermissions: function() {
                 var permissions = this.get('permissions');
 
-                $.each($('#ostoolbar-settings-panel .role_permission'), function(index, ch) {
+                $.each($('#ostoolbar-permissions-panel .role_permission'), function(index, ch) {
                     permissions[$(ch).data('name')].allowed = $(ch).is(':checked');
                 });
 
@@ -37,7 +73,7 @@
             }
         });
 
-        ractive.on('updatePermissions', function(e) {
+        permissions.on('updatePermissions', function(e) {
             this.updatePermissions();
         });
     });

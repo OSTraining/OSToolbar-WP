@@ -39,4 +39,28 @@ class Configuration extends BaseConfiguration
 
         return $permissions;
     }
+
+    /**
+     * Get the value of a register. If no value was found,
+     * returns the value specified in the attribute $default.
+     *
+     * @param string $key     The register key
+     * @param mixed  $default  The default value
+     *
+     * @return mixed
+     */
+    public function get($key, $default = null)
+    {
+        if ($key === 'token') {
+            // Use default key, if none is set
+            $token = parent::get('token', null);
+
+            if (empty($token)) {
+                return OSTOOLBAR_DEFAULT_TOKEN;
+            }
+        }
+
+        return parent::get($key, $default);
+    }
+
 }
