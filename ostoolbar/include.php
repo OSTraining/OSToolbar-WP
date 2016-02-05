@@ -16,5 +16,5 @@ if (!defined('OSTOOLBAR_LOADED')) {
     define('OSTOOLBAR_IMAGES_PATH', OSTOOLBAR_ASSETS_PATH . '/images');
     define('OSTOOLBAR_LOG_PATH', OSTOOLBAR_BASE_PATH . '/log');
 
-    require_once 'default_token.php';
+    require_once 'defaults.php';
 }

@@ -218,21 +218,23 @@ class Admin
                 </div>
             {{/showDefaultTokenWarning}}
 
-            {{#usingDefaultToken}}
-                <div class="ostoolbar-inline-suggestion">
+            <?php if (OSTOOLBAR_DEFAULT_TRAINING_AD_PARTNER) : ?>
+                {{#usingDefaultToken}}
+                    <div class="ostoolbar-inline-suggestion">
 
-                    Using the default token you have access to all free content provided by <a href="https://www.ostraining.com">OSTraining</a>.<br>
+                        Using the default token you have access to all free content provided by <a href="<?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_SITE; ?>" target="_blank"><?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER; ?></a>.<br>
 
-                    In case you are interested in any of the following features:
-                    <ul>
-                        <li>Affiliate Program</li>
-                        <li>More advanced or custom Videos</li>
-                        <li>Custom Layout</li>
-                    </ul>
+                        In case you are interested in any of the following features:
+                        <ul>
+                            <li>Affiliate Program</li>
+                            <li>More advanced or custom Videos</li>
+                            <li>Custom Layout</li>
+                        </ul>
 
-                    <a href="mailto:contact@ostraining.com">Contact us</a> to receive a personal token and more information.
-                </div>
-            {{/usingDefaultToken}}
+                        <a href="<?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_CONTACT; ?>" target="_blank">Contact us</a> to receive a personal token and more information.
+                    </div>
+                {{/usingDefaultToken}}
+            <?php endif; ?>
 
             {{#edited}}
                 <div class="ostoolbar-inline-warning">
