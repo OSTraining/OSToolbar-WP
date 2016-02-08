@@ -222,13 +222,13 @@ class Admin
                 {{#usingDefaultToken}}
                     <div class="ostoolbar-inline-suggestion">
 
-                        Using the default token you have access to all free content provided by <a href="<?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_SITE; ?>" target="_blank"><?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER; ?></a>.<br>
-
-                        In case you are interested in any of the following features:
+                        Using the default token you have access to all free content provided by <a href="<?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_SITE; ?>" target="_blank"><?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER; ?></a>.
+                        <br>
+                        If you are interested in any of the following additional features:
                         <ul>
-                            <li>Affiliate Program</li>
-                            <li>More advanced or custom Videos</li>
-                            <li>Custom Layout</li>
+                            <li><strong>Make money</strong> with our <a href="<?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_AFFILIATE_LINK; ?>">Affiliate Program</a></li>
+                            <li>Advanced or custom Videos</li>
+                            <li>Custom layout for OSToolbar</li>
                         </ul>
 
                         <a href="<?php echo OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_CONTACT; ?>" target="_blank">Contact us</a> to receive a personal token and more information.

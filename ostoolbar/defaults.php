@@ -21,4 +21,5 @@ if (!defined('OSTOOLBAR_DEFAULT_TRAINING_PROVIDER')) {
     define('OSTOOLBAR_DEFAULT_TRAINING_PROVIDER', 'OSTraining');
     define('OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_SITE', 'https://www.ostraining.com');
     define('OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_CONTACT', 'mailto:contact@ostraining.com');
+    define('OSTOOLBAR_DEFAULT_TRAINING_PROVIDER_AFFILIATE_LINK', 'https://www.ostraining.com/affiliate-program/');
 }
