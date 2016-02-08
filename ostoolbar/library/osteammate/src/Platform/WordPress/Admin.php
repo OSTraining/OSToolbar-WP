@@ -95,7 +95,15 @@ class Admin
      * Register and add settings
      */
     public function pageInit()
-    {
+    {// Check refresh cache command
+        if (@$_GET['action'] === 'cache_refresh') {
+            Factory::getContainer()->cache->clean();
+
+            // After redirect it will refresh the cache automatically
+            \wp_redirect('options-general.php?page=ostoolbar_settings');
+            return;
+        }
+
         add_settings_section(
             static::SETTINGS_SECTION,
             __('Basic Settings', 'ostoolbar'),
@@ -124,6 +132,13 @@ class Admin
             array($this, 'permissionField'),
             static::SETTINGS_PAGE,
             static::SETTINGS_SECTION
+        );
+
+        add_settings_section(
+            static::SETTINGS_SECTION . '_cache',
+            __('Cache', 'ostoolbar'),
+            array($this, 'printCacheForm'),
+            static::SETTINGS_PAGE
         );
 
         add_settings_section(
@@ -193,6 +208,14 @@ class Admin
                       }
                   };
               </script>';
+    }
+
+    /**
+     * Print the Cache Section text
+     */
+    public function printCacheForm()
+    {
+        echo '<a class="button" href="options-general.php?page=ostoolbar_settings&action=cache_refresh">Refresh Cache</a>';
     }
 
     /**

@@ -97,7 +97,7 @@ class Services implements ServiceProviderInterface
         };
 
         $pimple['cache'] = function (Container $c) {
-            $adapter = '\\OctopusFrame\\Platform\\' . $c['platform'] . '\\Cache';
+            $adapter = '\\OSTeammate\\Platform\\' . $c['platform'] . '\\Cache';
             $options = new ArrayRegistry(
                 array(
                     'path'     => $c['cachePath'],

@@ -21,6 +21,12 @@ defined('OCTOPUSFRAME_LOADED') or die();
 class FileAdapter extends PHPFastCacheAdapter
 {
     /**
+     * The storage path
+     * @var string
+     */
+    protected $path;
+
+    /**
      * Constructor
      *
      * @param mixed                $storage The parameters storage
@@ -28,26 +34,37 @@ class FileAdapter extends PHPFastCacheAdapter
      */
     public function __construct($storage = null, RegistrableInterface $options = null)
     {
-        $path = $options->get('path', null);
-        if (is_null($path)) {
+        $this->path = $options->get('path', null);
+
+        if (is_null($this->path)) {
             throw new UnexpectedValueException("Invalid option: path");
         }
 
-        if (!file_exists($path)) {
+        if (!file_exists($this->path)) {
             $container = Factory::getContainer();
 
-            if (!$container->folder->exists($path)) {
-                $container->folder->create($path);
+            if (!$container->folder->exists($this->path)) {
+                $container->folder->create($this->path);
             }
 
-            if (!file_exists($path)) {
+            if (!file_exists($this->path)) {
                 throw new UnexpectedValueException("Invalid option: path. The path doesn't exists and couldn't be created");
             }
         }
 
         phpfastcache::setup('storage', 'file');
-        phpfastcache::setup('path', $path);
+        phpfastcache::setup('path', $this->path);
 
         parent::__construct($storage);
+    }
+
+    /**
+     * Returns the path
+     *
+     * @return string The path
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 }

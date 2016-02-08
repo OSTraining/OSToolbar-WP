@@ -112,4 +112,43 @@ class Native implements FolderInterface
 
         return $return;
     }
+
+    /**
+     * Clean a folder, without remove it. Allow to specify a list of
+     * files to ignore (specified with relative paths).
+     *
+     * @param  string $path   The folder's path
+     * @param  array  $ignore A list of items to ignore
+     * @return bool           True, if success
+     */
+    public function clean($path, array $ignore = array())
+    {
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        if (!empty($files)) {
+            foreach ($files as $fileinfo) {
+                $ignoreFile = false;
+                if (!empty($ignore)) {
+                    foreach ($ignore as $item) {
+                        if ($fileinfo->getRealPath() === $path . '/' . $item) {
+                            // Do not remove the current item. Go to the next one.
+                            $ignoreFile = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!$ignoreFile) {
+                    $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+                    $todo($fileinfo->getRealPath());
+                }
+            }
+        }
+
+        // @todo: make it return false, in case of any error
+        return true;
+    }
 }
