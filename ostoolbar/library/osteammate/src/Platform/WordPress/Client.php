@@ -27,7 +27,13 @@ class Client extends AbstractClient
         $container = Factory::getContainer();
 
         if ($container->api->isConnected()) {
-            $container->templateUpdater->checkUpdate(3600);
+            $force = false;
+            // Check if we don't have the base template file, to force an update
+            if (!file_exists($container->templateEngine->getTemplatesPath() . '/base.html')) {
+                $force = true;
+            }
+
+            $container->templateUpdater->checkUpdate(3600, $force);
         }
 
         add_shortcode('osteammate', array($this, 'replaceShortCode'));
