@@ -15,6 +15,7 @@ if (!defined('OSTOOLBAR_LOADED')) {
     define('OSTOOLBAR_ASSETS_PATH', OSTOOLBAR_BASE_PATH . '/assets');
     define('OSTOOLBAR_IMAGES_PATH', OSTOOLBAR_ASSETS_PATH . '/images');
     define('OSTOOLBAR_LOG_PATH', OSTOOLBAR_BASE_PATH . '/log');
+    define('OSTOOLBAR_CACHE_PATH', OSTOOLBAR_BASE_PATH . '/cache');
 
     require_once 'defaults.php';
 }

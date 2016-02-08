@@ -26,8 +26,8 @@ require_once __DIR__ . '/include.php';
 $options = new ArrayRegistry(
     array(
         'platform'  => 'WordPress',
-        'cachePath' => realpath(__DIR__ . '/cache'),
-        'logPath'   => realpath(__DIR__ . '/log'),
+        'cachePath' => realpath(OSTOOLBAR_CACHE_PATH),
+        'logPath'   => realpath(OSTOOLBAR_LOG_PATH),
         'services'  => new Services
     )
 );
