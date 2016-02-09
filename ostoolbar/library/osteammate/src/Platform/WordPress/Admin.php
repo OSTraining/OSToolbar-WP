@@ -339,15 +339,15 @@ class Admin
      */
     public function enqueueScripts($hook)
     {
+        // Add configuration scripts/css
+        wp_register_style(
+            'ostoolbar-configuration',
+            $this->getUrl(OSTOOLBAR_ASSETS_PATH . '/css/configuration.css')
+        );
+        wp_enqueue_style('ostoolbar-configuration');
+
         if ($hook === 'settings_page_ostoolbar_settings') {
             wp_register_script('ostoolbar-ractive', 'http://cdn.ractivejs.org/latest/ractive.js');
-
-            // Add configuration scripts/css
-            wp_register_style(
-                'ostoolbar-configuration',
-                $this->getUrl(OSTOOLBAR_ASSETS_PATH . '/css/configuration.css')
-            );
-            wp_enqueue_style('ostoolbar-configuration');
 
             wp_register_script(
                 'ostoolbar-configuration',
