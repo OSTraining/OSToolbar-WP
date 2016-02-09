@@ -7,28 +7,32 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-OSToolbar is a plugin that shows training videos inside your WordPress admin panel.
+OSToolbar is a plugin that shows training videos inside your WordPress admin panel and site.
 
 == Description ==
 
-OSToolbar shows training videos inside your WordPress admin panel.
+OSToolbar shows training videos inside your WordPress admin panel and site.
 
 [OSTraining.com](http://ostraining.com/ "OSTraining WordPress Training") produces hundreds of training videos every year. We wanted to make it easier for WordPress users to see those videos without coming to our site each time.
 
 Using the OSToolbar is as easy as: Install, Activate, Watch. With three clicks you can have WordPress videos directly inside your WordPress admin panel.
 
-There is also a Pro version available. Features include:
+Features include:
 
-1. More videos
-2. Choose which videos to show
-3. Choose what order the videos appear in
-4. Choose which users can see the videos
+1. Wordpress videos
+2. Choose which users can see the videos
+
+There is also a Pro version available. Pro features include:
+
+1. Advanced or custom videos
+2. Custom layout
+3. Make money with the [OSTraining Affiliate Program](https://www.ostraining.com/affiliate-program/ "OSTraining Affiliate Program")
 
 == Installation ==
 
 1. Install OSToolbar either via the WordPress.org plugin directory, or by uploading the files to your server
 2. Click the Activate button.
-3. Visit the OSToolbar link in your WordPress admin menu and start watching videos.
+3. Visit the OSToolbar link in your WordPress admin menu and start watching videos. There is an option to use the shortcode "ostoolbar" to display it in any custom page.
 
 == Frequently Asked Questions ==
 
