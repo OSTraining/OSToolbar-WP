@@ -184,7 +184,8 @@ class Admin
         $user      = wp_get_current_user(); // @todo: Create a platform-specific user class
         $container = Factory::getContainer();
 
-        echo '<button id="ostoolbar-feedback-btn">Provide Feedback</button>';
+        echo '<p>Do you like this extension, found an error, or have any suggestion? Please, use the button below.</p>';
+        echo '<button id="ostoolbar-feedback-btn" class="button">Provide Feedback</button>';
         echo '<script type="text/javascript" src="https://ostraining.atlassian.net/s/f25af8f2d88b3e09d0426cd659a2d113-T/en_US-fd2bae/71001/30d688cae3a5e0b7b42a9da7fdb0e0bd/2.0.10/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=2dc2d5de"></script>
               <script type="text/javascript">
                   window.ATL_JQ_PAGE_PROPS =  {
@@ -215,6 +216,7 @@ class Admin
      */
     public function printCacheForm()
     {
+        echo '<p>Here you can refresh the cached layout and other information received from the API.</p>';
         echo '<a class="button" href="options-general.php?page=ostoolbar_settings&action=cache_refresh">Refresh Cache</a>';
     }
 
