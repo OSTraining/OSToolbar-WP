@@ -95,9 +95,23 @@ class Admin
      * Register and add settings
      */
     public function pageInit()
-    {// Check refresh cache command
+    {
+        $container = Factory::getContainer();
+
+        // Check if the settings were saved and if the token has changed. If yes, refresh the cache. But do not redirect
+        if (@$_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ostoolbar_settings'])) {
+            // Check if the token has changed
+            $currentToken = $container->configuration->get('token');
+            $newToken = @$_POST['ostoolbar_settings']['token'];
+
+            if ($currentToken !== $newToken) {
+                $container->cache->clean();
+            }
+        }
+
+        // Check refresh cache command
         if (@$_GET['action'] === 'cache_refresh') {
-            Factory::getContainer()->cache->clean();
+            $container->cache->clean();
 
             // After redirect it will refresh the cache automatically
             \wp_redirect('options-general.php?page=ostoolbar_settings');
