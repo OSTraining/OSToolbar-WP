@@ -1,4 +1,8 @@
-# Plugin Name
+[![Alledia](https://www.alledia.com/images/logo_circle_small.png)](https://www.alledia.com)
+
+OSToolbar for WordPress
+============
+
 Contributors: alledia
 Tags: video, tutorials, help, support, documentation
 Requires at least: 4.0
@@ -7,28 +11,31 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-OSToolbar is a plugin that shows training videos inside your WordPress admin panel.
-
+OSToolbar is a plugin that shows training videos inside your WordPress admin panel and site.
 ## Description
 
-OSToolbar shows training videos inside your WordPress admin panel.
+OSToolbar shows training videos inside your WordPress admin panel and site.
 
 [OSTraining.com](http://ostraining.com/ "OSTraining WordPress Training") produces hundreds of training videos every year. We wanted to make it easier for WordPress users to see those videos without coming to our site each time.
 
 Using the OSToolbar is as easy as: Install, Activate, Watch. With three clicks you can have WordPress videos directly inside your WordPress admin panel.
 
-There is also a Pro version available. Features include:
+Features include:
 
-1. More videos
-2. Choose which videos to show
-3. Choose what order the videos appear in
-4. Choose which users can see the videos
+1. Wordpress videos
+2. Choose which users can see the videos
+
+There is also a Pro version available. Pro features include:
+
+1. Advanced or custom videos
+2. Custom layout
+3. Make money with the [OSTraining Affiliate Program](https://www.ostraining.com/affiliate-program/ "OSTraining Affiliate Program")
 
 ## Installation
 
 1. Install OSToolbar either via the WordPress.org plugin directory, or by uploading the files to your server
 2. Click the Activate button.
-3. Visit the OSToolbar link in your WordPress admin menu and start watching videos.
+3. Visit the OSToolbar link in your WordPress admin menu and start watching videos. There is an option to use the shortcode "ostoolbar" to display it in any custom page.
 
 ## Frequently Asked Questions
 
@@ -36,10 +43,16 @@ There is also a Pro version available. Features include:
 
 Yes, the plugin is released under the GPL license and you can install it on as many sites as wish.
 
+### Where can I see these videos in my site?
+
+You choose. By default OSToolbar adds a new menu item in the admin page. You can watch from there, or if you want, you
+can allow logged in users to watch, creating a new page and adding the shortcode "[ostoolbar]" in the page content.
+
 ## Screenshots
 
-1. The list of videos in your WordPress admin panel.
-2. Watching a video.
+1. The list of courses in your WordPress admin panel.
+2. The course details with a list of videos to watch.
+3. Watching a video.
 
 ## Changelog
 
@@ -66,10 +79,16 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 * Remove obsolete code
 * Update icons
 
-
 ### 3.0.2
 * Minor code clean-up
 * Fix a link to settings page
 
-### 4.0.0
+### 3.0.3
 * Fix a problem with urls to videos
+
+### 4.0.0
+* Refactored to use OSTeammate's API to display the training
+* Added option to refresh the API cache
+* Added new training workflow
+* Added button to send feedback in the admin
+

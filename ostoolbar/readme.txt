@@ -40,10 +40,16 @@ There is also a Pro version available. Pro features include:
 
 Yes, the plugin is released under the GPL license and you can install it on as many sites as wish.
 
+= Where can I see these videos in my site? =
+
+You choose. By default OSToolbar adds a new menu item in the admin page. You can watch from there, or if you want, you
+can allow logged in users to watch, creating a new page and adding the shortcode "[ostoolbar]" in the page content.
+
 == Screenshots ==
 
-1. The list of videos in your WordPress admin panel.
-2. Watching a video.
+1. The list of courses in your WordPress admin panel.
+2. The course details with a list of videos to watch.
+3. Watching a video.
 
 == Changelog ==
 
@@ -74,5 +80,11 @@ Yes, the plugin is released under the GPL license and you can install it on as m
 * Minor code clean-up
 * Fix a link to settings page
 
-= 4.0.0 =
+= 3.0.3 =
 * Fix a problem with urls to videos
+
+= 4.0.0 =
+* Refactored to use OSTeammate's API to display the training
+* Added option to refresh the API cache
+* Added new training workflow
+* Added button to send feedback in the admin
