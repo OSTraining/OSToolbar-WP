@@ -20,9 +20,9 @@ abstract class AbstractRouter implements RoutableInterface
 
     protected $baseURL = '';
 
-    public function getViewName()
+    public function getViewName($defaultView = '')
     {
-        $viewName = $this->getParam('view', 'pathways');
+        $viewName = $this->getParam('view', $defaultView);
 
         // Check the access and redirect to access denied, if required
         $context = "view.{$viewName}";

@@ -113,10 +113,22 @@ class AbstractClient extends AbstractApplication implements ClientInterface
     {
         if (empty($this->view)) {
             $container     = Factory::getContainer();
-            $viewName      = $container->router->getViewName();
+            $viewName      = $container->router->getViewName('pathways');
             $viewClassName = 'OSTeammate\\View\\' . ucfirst($viewName);
 
             $this->view = new $viewClassName($container->templateEngine);
+
+            // Check if we are on the pathway list, and if we only have one, automatically load it
+            if ($viewName === 'pathways') {
+                $data = $this->view->getModel()->getData();
+
+                if (count($data) === 1) {
+                    // Redirect to the Courses page
+                    $this->view = new \OSTeammate\View\Courses($container->templateEngine);
+                    $container->router->setParam('view', 'courses');
+                    $container->router->setParam('pathway_id', $data[0]->id);
+                }
+            }
         }
 
         return $this->view;
