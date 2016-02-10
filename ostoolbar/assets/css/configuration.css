@@ -41,3 +41,13 @@
 
 #toplevel_page_ostoolbar:hover .wp-not-current-submenu .dashicons-admin-generic::before {
     background-position: 0 -33px;
+}
+
+h1#ostoolbar-title {
+    line-height: 55px;
+}
+
+h1#ostoolbar-title img {
+    float: left;
+    margin-right: 10px;
+}

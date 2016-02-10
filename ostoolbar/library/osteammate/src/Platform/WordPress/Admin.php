@@ -77,18 +77,24 @@ class Admin
     {
         $container = Factory::getContainer();
 
+        echo '<h1 id="ostoolbar-title">
+                 <img src="' . plugins_url('/ostoolbar/assets/images/icon-48-tutorials.png') . '" /> Training
+              </h1>';
+        echo '<div id="ostoolbar_wp_wrapper">';
+
         // Check the user capabilities
         if ($container->access->hasAccess('see_ostoolbar_videos')) {
-            echo '<div id="ostoolbar_wp_wrapper">';
+
 
             if (!$container->api->isConnected()) {
                 echo '<div class="error">Error connecting to OSToolbar API. Please, verify the API token or use the default one: <strong>' . OSTOOLBAR_DEFAULT_TOKEN . '</strong>.</div>';
             }
 
             echo $container->client->getView()->getOutput();
-
-            echo '</div>';
+        } else {
+            echo '<div class="error">Sorry, you don\'t have access to this page.</div>';
         }
+        echo '</div>';
     }
 
     /**
