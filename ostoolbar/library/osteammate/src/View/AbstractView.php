@@ -65,7 +65,7 @@ class AbstractView implements ViewableInterface
      *
      * @return array The data for templates
      */
-    protected function getData(array $data = array())
+    public function getData(array $data = array())
     {
         if (!isset($data['theme'])) {
             $data['theme'] = Factory::getContainer()->client->getTheme();

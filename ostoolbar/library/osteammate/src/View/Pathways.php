@@ -31,7 +31,7 @@ class Pathways extends AbstractView
      *
      * @return array The data for templates
      */
-    protected function getData(array $data = array())
+    public function getData(array $data = array())
     {
         $breadcrumbs = Breadcrumbs::getInstance();
         $data        = $this->model->getData();

@@ -33,4 +33,14 @@ interface ViewableInterface
      * @return string The view's title
      */
     public function getTitle();
+
+    /**
+     * Returns the data to be used to render the template. This method should be overriden by
+     * every child class
+     *
+     * @param array $data An initial data
+     *
+     * @return array The data for templates
+     */
+    public function getData(array $data = array());
 }

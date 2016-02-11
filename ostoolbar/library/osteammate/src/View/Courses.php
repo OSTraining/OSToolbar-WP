@@ -32,7 +32,7 @@ class Courses extends AbstractView
      *
      * @return array The data for templates
      */
-    protected function getData(array $data = array())
+    public function getData(array $data = array())
     {
         $router    = Factory::getContainer()->router;
         $pathwayId = (int)$router->getParam('pathway_id');

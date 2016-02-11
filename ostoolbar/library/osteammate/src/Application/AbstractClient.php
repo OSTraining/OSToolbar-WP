@@ -120,13 +120,27 @@ class AbstractClient extends AbstractApplication implements ClientInterface
 
             // Check if we are on the pathway list, and if we only have one, automatically load it
             if ($viewName === 'pathways') {
-                $data = $this->view->getModel()->getData();
+                $data = $this->view->getData();
 
-                if (count($data) === 1) {
+                if (count($data['pathways']) === 1) {
                     // Redirect to the Courses page
+                    $viewName = 'courses';
                     $this->view = new \OSTeammate\View\Courses($container->templateEngine);
-                    $container->router->setParam('view', 'courses');
-                    $container->router->setParam('pathway_id', $data[0]->id);
+                    $container->router->setParam('view', $viewName);
+                    $container->router->setParam('pathway_id', $data['pathways'][0]->id);
+                }
+            }
+
+            // Check if we are on the courses list, and if we only have one, automatically load it
+            if ($viewName === 'courses') {
+                $data = $this->view->getData();
+
+                if (count($data['courses']) === 1) {
+                    $viewName = 'course';
+                    $this->view = new \OSTeammate\View\Course($container->templateEngine);
+                    $container->router->setParam('view', $viewName);
+                    $container->router->setParam('pathway_id', $data['pathway']->id);
+                    $container->router->setParam('course_id', $data['courses'][0]->id);
                 }
             }
         }

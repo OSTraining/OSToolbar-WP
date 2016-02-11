@@ -101,7 +101,7 @@ class AbstractOverridableView extends AbstractView
      *
      * @return array The data for templates
      */
-    protected function getData(array $data = array())
+    public function getData(array $data = array())
     {
         $this->checkFormSubmissionAndRouteToAPI($data);
 

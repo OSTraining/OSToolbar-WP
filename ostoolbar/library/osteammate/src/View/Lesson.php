@@ -32,7 +32,7 @@ class Lesson extends AbstractOverridableView
      *
      * @return array The data for templates
      */
-    protected function getData(array $data = array())
+    public function getData(array $data = array())
     {
         $router = Factory::getContainer()->router;
 
