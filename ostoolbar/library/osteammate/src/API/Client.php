@@ -111,8 +111,12 @@ class Client implements ClientAPIInterface
 
             if (is_object($body) && $body->error == 0) {
                 // Set the affiliate link
-                if (isset($body->data->affiliate_link) && !empty(trim($body->data->affiliate_link))) {
-                    $this->affiliateLink = trim($body->data->affiliate_link);
+                if (isset($body->data->affiliate_link)) {
+                    $body->data->affiliate_link = trim($body->data->affiliate_link);
+
+                    if (!empty($body->data->affiliate_link)) {
+                        $this->affiliateLink = trim($body->data->affiliate_link);
+                    }
                 }
 
                 return $body->data;
